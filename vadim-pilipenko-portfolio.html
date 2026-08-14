@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vadim Pilipenko — Web &amp; Technical Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=Tektur:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #EAEFF0;
+    --paper2: #E1E7E8;
+    --ink: #10181F;
+    --muted: #57666D;
+    --line: #C3CFD2;
+    --line-strong: #9FAFB3;
+    --signal: #128A5C;
+    --signal-soft: #DCF0E6;
+    --warn: #C97A1F;
+    --card: #F5F7F6;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+    --cond: 'Tektur', sans-serif;
+    --gap: clamp(20px, 5vw, 20px);
+    --radius: 18px;
+    --slide-speed: 1000ms;
+    --lightbox-slide-speed: 300ms;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:
+      linear-gradient(var(--paper2) 1px, transparent 1px) 0 0/100% 32px,
+      linear-gradient(90deg, var(--paper2) 1px, transparent 1px) 0 0/32px 100%,
+      var(--paper);
+    background-attachment:local;
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:16px;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--signal); color:#fff; }
+  a{ color:inherit; }
+  h1,h2,h3{ margin:0; font-family:var(--cond); font-weight:normal; letter-spacing:0.02em; text-transform:uppercase; }
+  .mono{ font-family:var(--mono); }
+
+  /* ---------- language toggle ---------- */
+  .en{ display:none; }
+  body.lang-en .ru{ display:none; }
+  body.lang-en .en{ display:inline; }
+  body.lang-en .en-block{ display:block; }
+  body.lang-en .en-grid{ display:grid; }
+  body.lang-en .en-flex{ display:flex; }
+
+  .lang-switch{
+    display:flex; align-items:center; gap:0;
+    border:1.5px solid var(--ink); border-radius:100px;
+    overflow:hidden; font-family:var(--mono); font-size:11px; font-weight:600;
+    background:var(--card);
+  }
+  .lang-switch button{
+    border:none; background:transparent; padding:7px 13px; cursor:pointer;
+    color:var(--muted); letter-spacing:0.04em;
+  }
+  .lang-switch button.active{ background:var(--ink); color:var(--paper); }
+
+  /* ---------- registration / title block ---------- */
+  .crosshair{ position:relative; width:16px; height:16px; flex:none; }
+  .crosshair::before, .crosshair::after{
+    content:""; position:absolute; background:var(--line-strong);
+  }
+  .crosshair::before{ left:50%; top:0; width:1px; height:100%; }
+  .crosshair::after{ top:50%; left:0; height:1px; width:100%; }
+
+  header.titleblock{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px var(--gap);
+    background:rgba(234,239,240,0.88);
+    backdrop-filter:blur(6px);
+    border-bottom:1.5px solid var(--ink);
+  }
+  .tb-left{ display:flex; align-items:center; gap:14px; }
+  .tb-mark{
+    width:34px; height:34px; border:1.5px solid var(--ink); border-radius:4px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--cond); font-weight:700; font-size:11px;
+  }
+  .tb-doc{ font-family:var(--mono); font-size:11px; color:var(--muted); line-height:1.4; }
+  nav.tb-links{ display:flex; gap:26px; }
+  nav.tb-links a{
+    font-family:var(--mono); font-size:13px; text-decoration:none; color:var(--muted);
+  }
+  @media (min-width:900px){ nav.tb-links a{ font-size:14px; } }
+  nav.tb-links a:hover{ color:var(--ink); }
+  nav.tb-links a.active{ color:var(--ink);font-weight: 500; }
+  .tb-right{ display:flex; align-items:center; gap:18px; }
+
+  /* burger button (mobile) */
+  .burger{
+    display:none; flex-direction:column; justify-content:center; gap:5px;
+    width:38px; height:34px; border:1.5px solid var(--ink); border-radius:4px;
+    background:var(--card); cursor:pointer; padding:0; flex:none;
+  }
+  .burger span{ width:16px; height:2px; background:var(--ink); margin:0 auto; transition:transform .2s ease, opacity .2s ease; }
+  .burger.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+  .burger.open span:nth-child(2){ opacity:0; }
+  .burger.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+  @media (max-width:760px){
+    .burger{ display:flex; }
+    nav.tb-links{
+      position:fixed; top:66px; left:0; right:0; z-index:60;
+      flex-direction:column; gap:0;
+      background:var(--paper); border-bottom:1.5px solid var(--ink);
+      max-height:0; overflow:hidden; transition:max-height .28s ease;
+    }
+    nav.tb-links.open{ max-height:320px; }
+    nav.tb-links a{
+      padding:16px var(--gap); border-top:1px solid var(--line); font-size:14px;
+    }
+  }
+
+  .wrap{ padding:0 var(--gap); position:relative; }
+
+  /* ---------- PCB trace spine ---------- */
+  .spine{
+    position:absolute; left:calc(var(--gap) - 1px); top:0; bottom:0; width:2px;
+    background:repeating-linear-gradient(var(--line-strong) 0 6px, transparent 6px 11px);
+    z-index:1;
+  }
+
+  .sheet-marker{
+    position:relative; display:flex; align-items:center; gap:14px; margin-bottom:14px;
+  }
+  .sheet-marker .via{
+    width:11px; height:11px; border-radius:50%; background:var(--paper);
+    border:2px solid var(--signal); flex:none; margin-left:-3px; z-index:2;
+  }
+  .sheet-marker .tag{
+    font-family:var(--mono); font-size:12px; color:var(--signal); font-weight:600;
+    letter-spacing:0.06em;
+  }
+
+  #services, #case, #process, #stack, #contact{ scroll-margin-top:80px; }
+
+  /* ---------- hero ---------- */
+  .hero{ padding:64px 0 60px 22px; }
+  .hero-doc{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--mono); font-size:12px; color:var(--muted);
+    border:1px solid var(--line-strong); border-radius:100px; padding:6px 14px 6px 10px;
+    margin-bottom:28px;
+  }
+  .hero-doc .dot{ width:6px; height:6px; border-radius:50%; background:var(--signal); }
+  .hero h1{ font-size:clamp(30px,5.8vw,94px); line-height:1.08; margin-bottom:20px; }
+  .hero h1 d { font-family: var(--mono);font-weight: 300;color: var(--muted); display: block; font-size: 22px; }
+  .hero-sub{ font-size:19px; color:var(--muted); max-width:56ch; line-height:1.6; margin-bottom:44px; }
+  @media (min-width:900px){ .hero-sub{ font-size:21px; } }
+
+  .spec-table{
+    display:grid; grid-template-columns:repeat(4,1fr);
+    border:1.5px solid var(--ink); border-radius:var(--radius); overflow:hidden;
+  }
+  .spec-table .cell{
+    padding:16px 18px; border-right:1px solid var(--line); background:var(--card);
+  }
+  .spec-table .cell:last-child{ border-right:none; }
+  .spec-table .cell .k{
+    font-family:var(--mono); font-size:11px; color:var(--muted);
+    text-transform:uppercase; letter-spacing:0.07em; display:block; margin-bottom:9px;
+  }
+  .spec-table .cell .v{ font-size:16px; font-weight:500; line-height:1.35; }
+  @media (min-width:900px){ .spec-table .cell .v{ font-size:18px; } .spec-table .cell{ padding:20px 22px; } }
+  @media (max-width:760px){ .spec-table{ grid-template-columns:1fr 1fr; } }
+
+  /* ---------- section shell ---------- */
+  .section{ padding:76px 0 76px 22px; border-top:1px solid var(--line); position:relative; }
+  .section-intro{ display:flex; justify-content:space-between; gap:24px; flex-wrap:wrap; margin-bottom:44px; }
+  .section-intro h2{ font-size:clamp(24px,3vw,54px); line-height:1.2; max-width:18ch; }
+  .section-intro .note{ max-width:34ch; color:var(--muted); font-size:15.5px; line-height:1.55; }
+  @media (min-width:900px){ .section-intro .note{ font-size:16.5px; } }
+
+  /* ---------- pinout / services table ---------- */
+  .pinout{ border:1.5px solid var(--ink); border-radius:var(--radius); overflow:hidden; }
+  .pin-row{
+    display:grid; grid-template-columns:90px 1fr 1.4fr;
+    border-top:1px solid var(--line); align-items:center;
+  }
+  .pin-row:first-child{ border-top:none; }
+  .pin-row:nth-child(odd){ background:var(--card); }
+  .pin-tag{
+    font-family:var(--mono); font-size:11.5px; font-weight:600; color:var(--signal);
+    padding:20px 18px; border-right:1px solid var(--line);
+  }
+  .pin-name{ padding:20px 18px; font-weight:500; font-size:17px; border-right:1px solid var(--line); }
+  .pin-desc{ padding:20px 18px; font-size:14.5px; color:var(--muted); line-height:1.55; }
+  @media (min-width:900px){
+    .pin-name{ font-size:19px; }
+    .pin-desc{ font-size:15.5px; }
+  }
+  @media (max-width:700px){
+    .pin-row{ grid-template-columns:1fr; }
+    .pin-tag, .pin-name{ border-right:none; border-bottom:1px dashed var(--line); }
+  }
+
+  /* ---------- case study ---------- */
+  .case{
+    border:1.5px solid var(--ink); border-radius:var(--radius); overflow:hidden; background:var(--card);
+    display:grid; grid-template-columns:1fr 1fr;
+  }
+  @media (max-width:820px){ .case{ grid-template-columns:1fr; } }
+  .case-visual{
+    background:
+      repeating-linear-gradient(0deg, rgba(16,24,31,0.05) 0 1px, transparent 1px 24px),
+      repeating-linear-gradient(90deg, rgba(16,24,31,0.05) 0 1px, transparent 1px 24px),
+      #EFF3F3;
+    position:relative; min-height:340px; overflow:hidden;
+    border-right:1.5px solid var(--ink);
+  }
+  @media (max-width:820px){ .case-visual{ border-right:none; border-bottom:1.5px solid var(--ink); } }
+
+  /* ---------- case slider ---------- */
+  .slider-track{ display:flex; height:100%; min-height:340px; transition:transform var(--slide-speed) ease; }
+  .slide{
+    min-width:100%; min-height:340px; display:flex; align-items:center; justify-content:center;
+    padding:34px; position:relative;
+  }
+  .slide img{ max-width:100%; max-height:272px; object-fit:contain; display:block; }
+  .slide.empty img{ display:none; }
+  .slide-empty-note{
+    display:none; text-align:center; font-family:var(--mono); font-size:11.5px; color:var(--muted);
+    line-height:1.7; border:1px dashed var(--line-strong); border-radius:4px; padding:22px 20px; max-width:240px;
+  }
+  .slide.empty .slide-empty-note{ display:block; }
+  .slider-arrow{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:36px; height:36px; border-radius:50%; border:1.5px solid var(--ink);
+    background:var(--paper); cursor:pointer; display:flex; align-items:center; justify-content:center;
+    z-index:5; color:var(--ink); padding:0;
+  }
+  .slider-arrow svg{ width:16px; height:16px; display:block; }
+  .slider-arrow.prev{ left:14px; }
+  .slider-arrow.next{ right:14px; }
+  .slider-arrow:hover{ background:var(--signal); border-color:var(--signal); color:#fff; }
+  .slider-dots{ position:absolute; bottom:14px; left:0; right:0; display:flex; justify-content:center; gap:8px; z-index:5; }
+  .slider-dots .dot{
+    width:8px; height:8px; border-radius:50%; border:1.5px solid var(--ink); background:transparent;
+    padding:0; cursor:pointer;
+  }
+  .slider-dots .dot.active{ background:var(--ink); }
+
+  /* click-to-zoom hint + slide clickability */
+  .slide:not(.empty){ cursor:zoom-in; }
+  .zoom-hint{
+    position:absolute; top:14px; right:14px; z-index:5;
+    display:flex; align-items:center; gap:6px;
+    font-family:var(--mono); font-size:11.5px; color:var(--muted);
+    background:rgba(245,247,246,0.9); border:1px solid var(--line-strong);
+    border-radius:100px; padding:5px 12px 5px 10px;
+    opacity:0; transform:translateY(-4px);
+    transition:opacity .18s ease, transform .18s ease;
+    pointer-events:none;
+  }
+  .case-visual:hover .zoom-hint{ opacity:1; transform:none; }
+
+  /* lightbox */
+  .lightbox{
+    position:fixed; inset:0; z-index:200; background:rgba(16,24,31,0.94);
+    display:none; align-items:center; justify-content:center; padding:48px;
+  }
+  .lightbox.open{ display:flex; }
+  .lightbox-inner{ max-width:92vw; max-height:88vh; display:flex; align-items:center; justify-content:center; transition:opacity var(--lightbox-slide-speed) ease; }
+  .lightbox-inner img{ max-width:92vw; max-height:88vh; object-fit:contain; border-radius:2px; }
+  .lightbox-inner svg{ width:min(80vw,640px); height:auto; max-height:88vh; background:#EFF3F3; border-radius:4px; }
+  .lightbox-inner.fading{ opacity:0; }
+  .lightbox-close{
+    position:fixed; top:26px; right:28px; z-index:201;
+    width:42px; height:42px; border-radius:50%; border:1.5px solid rgba(255,255,255,0.5);
+    background:transparent; color:#fff; cursor:pointer; padding:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .lightbox-close svg{ width:18px; height:18px; display:block; }
+  .lightbox-close:hover{ background:var(--signal); border-color:var(--signal); }
+  .lightbox-caption{
+    position:fixed; bottom:28px; left:0; right:0; text-align:center;
+    font-family:var(--mono); font-size:12px; color:rgba(255,255,255,0.6);
+  }
+  .lightbox-arrow{
+    position:fixed; top:50%; transform:translateY(-50%); z-index:201;
+    width:52px; height:52px; border-radius:50%;
+    border:1.5px solid rgba(255,255,255,0.5); background:transparent;
+    color:#fff; cursor:pointer; padding:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .lightbox-arrow svg{ width:22px; height:22px; display:block; }
+  .lightbox-arrow:hover{ background:var(--signal); border-color:var(--signal); }
+  .lightbox-arrow.prev{ left:24px; }
+  .lightbox-arrow.next{ right:24px; }
+  @media (max-width:640px){
+    .lightbox-arrow{ width:42px; height:42px; }
+    .lightbox-arrow svg{ width:18px; height:18px; }
+    .lightbox-arrow.prev{ left:10px; }
+    .lightbox-arrow.next{ right:10px; }
+  }
+
+  .case-body{ padding:34px; display: flex; flex-direction: column; justify-content: center;}
+  .case-kicker{ font-family:var(--mono); font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:10px; }
+  .case-body h3{ font-size:20px; line-height:1.2; margin-bottom:14px; }
+  .case-body p{ font-size:15px; color:var(--muted); line-height:1.65; margin:0 0 14px; }
+  @media (min-width:900px){
+    .case-body h3{ font-size:23px; }
+    .case-body p{ font-size:16.5px; }
+  }
+  .case-tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top:18px; }
+  .case-tags span{
+    font-family:var(--mono); font-size:11px; border:1px solid var(--line-strong);
+    padding:5px 11px; border-radius:100px; color:var(--muted);
+  }
+  .case-disclaimer{
+    margin-top:18px; padding-top:14px; border-top:1px dashed var(--line);
+    font-size:12px; color:var(--muted); font-style:italic; line-height:1.5;
+  }
+
+  /* schematic svg */
+  .schema-label{ position:absolute; font-family:var(--mono); font-size:10px; color:var(--muted); }
+
+  /* ---------- process ---------- */
+  .process{ display:grid; grid-template-columns:repeat(5,1fr); gap:0; border:1.5px solid var(--ink); border-radius:var(--radius); overflow:hidden; }
+  .process .step{ padding:26px 20px; border-left:1px solid var(--line); background:var(--card); }
+  .process .step:first-child{ border-left:none; }
+  .process .step .n{ font-family:var(--mono); font-size:12.5px; color:var(--signal); font-weight:700; display:block; margin-bottom:14px; }
+  .process .step h3{ font-size:14.5px; line-height:1.25; margin-bottom:10px; }
+  .process .step p{ font-size:13px; color:var(--muted); line-height:1.5; margin:0; }
+  @media (min-width:900px){
+    .process .step{ padding:32px 24px; }
+    .process .step h3{ font-size:16px; }
+    .process .step p{ font-size:14px; }
+  }
+  @media (max-width:900px){
+    .process{ grid-template-columns:1fr 1fr; }
+    .process .step:nth-child(3){ border-left:none; }
+  }
+  @media (max-width:560px){
+    .process{ grid-template-columns:1fr; }
+    .process .step{ border-left:none !important; border-top:1px solid var(--line); }
+    .process .step:first-child{ border-top:none; }
+  }
+
+  /* ---------- stack ---------- */
+  .stack-grid{ display:flex; flex-wrap:wrap; gap:12px; }
+  .chip{
+    font-family:var(--mono); font-size:13.5px; padding:11px 18px;
+    border:1.5px solid var(--ink); border-radius:4px; background:var(--card);
+    display:flex; align-items:center; gap:8px;
+  }
+  @media (min-width:900px){ .chip{ font-size:15px; padding:12px 20px; } }
+  .chip::before{ content:""; width:6px; height:6px; border-radius:50%; background:var(--signal); }
+
+  /* ---------- contact ---------- */
+  footer.contact{ padding:80px var(--gap) 0; border-top:1px solid var(--line); }
+  .contact-panel{
+    border:1.5px solid var(--ink); border-radius: var(--radius); padding:44px var(--gap);
+    background:var(--card); text-align:left;
+  }
+  .contact-panel .case-kicker{ margin-bottom:18px; }
+  .contact-panel h2{ font-size:clamp(24px,3.8vw,55px); line-height:1.15; max-width:15ch; margin-bottom:30px; }
+  .contact-links{ display:flex; gap:36px; flex-wrap:wrap; }
+  .contact-links a{
+    font-family:var(--mono); font-size:16px; text-decoration:none;
+    border-bottom:2px solid var(--signal); padding-bottom:3px;
+  }
+  @media (min-width:900px){ .contact-links a{ font-size:18px; } }
+  .contact-links a:hover{ color:var(--signal); }
+
+  .titleblock-footer{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
+    padding:26px var(--gap) 40px; margin-top:60px;
+    font-family:var(--mono); font-size:11px; color:var(--muted);
+  }
+  .titleblock-footer .fcell{ display:flex; align-items:center; gap:10px; }
+
+  .reveal{ opacity:0; transform:translateY(14px); transition:opacity .5s ease, transform .5s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .reveal{ opacity:1; transform:none; transition:none; }
+  }
+
+  :focus-visible{ outline:2px solid var(--signal); outline-offset:3px; }
+
+  /* ---------- large / 4K screens: scale typography up ~30% ---------- */
+  @media (min-width:1800px){
+    :root{ --gap: 84px; }
+    body{ font-size:19px; }
+    .tb-mark{ font-size:14px; width:42px; height:42px; }
+    .tb-doc{ font-size:14px; }
+    nav.tb-links a{ font-size:18px; }
+    .titleblock{ padding:22px var(--gap); }
+
+    .hero{ padding:84px 0 78px 30px; }
+    .hero-doc{ font-size:16px; padding:8px 18px 8px 13px; margin-bottom:36px; }
+    .hero h1{ margin-bottom:46px; }
+    .hero-sub{ font-size:27px; margin-bottom:58px; }
+
+    .sheet-marker{ gap:18px; margin-bottom:18px; }
+    .sheet-marker .via{ width:12px; height:12px; }
+    .sheet-marker .tag{ font-size:16px; }
+
+    .spec-table .cell .k{ font-size:15px; margin-bottom:12px; }
+    .spec-table .cell .v{ font-size:23px; }
+    .spec-table .cell{ padding:26px 28px; }
+
+    .section{ padding:100px 0 100px 30px; }
+    .section-intro{ margin-bottom:58px; }
+    .section-intro .note{ font-size:21px; }
+
+    .pin-tag{ font-size:15px; padding:26px 24px; }
+    .pin-name{ font-size:23px; padding:26px 24px; }
+    .pin-desc{ font-size:20px; padding:26px 24px; }
+
+    .case-visual{ min-height:420px; }
+    .slider-track{ min-height:420px; }
+    .slide{ min-height:420px; padding:44px; }
+    .slide img{ max-height:560px; }
+    .slide-empty-note{ font-size:15px; padding:28px 26px; max-width:300px; }
+    .slider-arrow{ width:46px; height:46px; font-size:20px; }
+    .case-body{ padding:46px; }
+    .case-kicker{ font-size:14px; margin-bottom:14px; }
+    .case-body h3{ font-size:30px; margin-bottom:18px; }
+    .case-body p{ font-size:21px; margin-bottom:18px; }
+    .case-tags{ gap:10px; margin-top:24px; }
+    .case-tags span{ font-size:15px; padding:7px 14px; }
+    .case-disclaimer{ font-size:16px; margin-top:24px; padding-top:18px; }
+
+    .process .step{ padding:42px 30px; }
+    .process .step .n{ font-size:16px; margin-bottom:18px; }
+    .process .step h3{ font-size:21px; margin-bottom:12px; }
+    .process .step p{ font-size:18px; }
+
+    .stack-grid{ gap:16px; }
+    .chip{ font-size:19.5px; padding:14px 22px; }
+
+    footer.contact{ padding:104px var(--gap) 0; }
+    .contact-panel{ padding:56px var(--gap); }
+    .contact-panel h2{ margin-bottom:40px; }
+    .contact-links{ gap:44px; }
+    .contact-links a{ font-size:23px; }
+
+    .titleblock-footer{ font-size:15px; padding:34px var(--gap) 52px; margin-top:78px; }
+    .lang-switch button{ font-size:14px; padding:9px 16px; }
+    .to-top{ width:54px; height:54px; right:28px; bottom:28px; }
+    .to-top svg{ width:22px; height:22px; }
+  }
+
+  /* ---------- back to top ---------- */
+  .to-top{
+    position:fixed; right:20px; bottom:20px; z-index:70;
+    width:46px; height:46px; border-radius:4px;
+    border:1.5px solid var(--ink); background:var(--card);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; opacity:0; pointer-events:none;
+    transform:translateY(8px);
+    transition:opacity .2s ease, transform .2s ease, background .15s ease;
+  }
+  .to-top.show{ opacity:1; pointer-events:auto; transform:none; }
+  .to-top:hover{ background:var(--signal); border-color:var(--signal); }
+  .to-top:hover svg path{ stroke:#fff; }
+  .to-top svg{ width:18px; height:18px; }
+  .to-top svg path{ stroke:var(--ink); }
+</style>
+</head>
+<body>
+
+<header class="titleblock">
+  <div class="tb-left">
+    <div class="tb-mark">VP</div>
+    <div class="tb-doc">
+      <span class="ru">DOC. VP-PORTFOLIO · REV 2026.08</span>
+      <span class="en">DOC. VP-PORTFOLIO · REV 2026.08</span><br>
+      <span class="ru">SHEET 1/1</span><span class="en">SHEET 1/1</span>
+    </div>
+  </div>
+  <nav class="tb-links" id="tbLinks">
+    <a href="#services"><span class="ru">Услуги</span><span class="en">Services</span></a>
+    <a href="#case"><span class="ru">Кейсы</span><span class="en">Case study</span></a>
+    <a href="#process"><span class="ru">Процесс</span><span class="en">Process</span></a>
+    <a href="#stack"><span class="ru">Инструменты</span><span class="en">Stack</span></a>
+    <a href="#contact"><span class="ru">Контакты</span><span class="en">Contact</span></a>
+  </nav>
+  <div class="tb-right">
+    <div class="lang-switch">
+      <button id="btnRu" class="active" onclick="setLang('ru')">RU</button>
+      <button id="btnEn" onclick="setLang('en')">EN</button>
+    </div>
+    <button class="burger" id="burgerBtn" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="wrap">
+<div class="spine"></div>
+
+<section class="hero">
+  <div class="hero-doc">
+    <span class="dot"></span>
+    <span class="ru">СПЕЦИФИКАЦИЯ · ВЕБ-РАЗРАБОТКА + ТЕХНИЧЕСКАЯ ГРАФИКА</span>
+    <span class="en">SPECIFICATION · WEB DEVELOPMENT + TECHNICAL GRAPHICS</span>
+  </div>
+  <h1>
+    <span class="ru"><d>Вадим Пилипенко</d>Pilipeople</span>
+    <span class="en"><d>Vadim Pilipenko</d>Pilipeople</span>
+  </h1>
+  <p class="hero-sub">
+    <span class="ru">Разрабатываю сайты, магазины и интерфейсы. Объясняю сложные системы через схемы и техническую инфографику. Дизайн-образование плюс 15 лет практики в коде.</span>
+    <span class="en">I build websites, stores and interfaces — and explain complex systems through diagrams and technical infographics. Communication design background, eight years of hands-on coding.</span>
+  </p>
+
+  <div class="spec-table">
+    <div class="cell">
+      <span class="k"><span class="ru">Роль</span><span class="en">Role</span></span>
+      <span class="v"><span class="ru">Веб-разработчик / дизайнер</span><span class="en">Web developer / designer</span></span>
+    </div>
+    <div class="cell">
+      <span class="k"><span class="ru">Фокус</span><span class="en">Focus</span></span>
+      <span class="v"><span class="ru">Сайты, дизайн, техническая графика</span><span class="en">Sites, design, technical graphics</span></span>
+    </div>
+    <div class="cell">
+      <span class="k"><span class="ru">Опыт</span><span class="en">Experience</span></span>
+      <span class="v"><span class="ru">15+ лет разработки</span><span class="en">15+ years in development</span></span>
+    </div>
+    <div class="cell">
+      <span class="k"><span class="ru">База</span><span class="en">Based in</span></span>
+      <span class="v"><span class="ru">Беларусь · удалённо</span><span class="en">Belarus · remote</span></span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="services">
+  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.01</span></div>
+  <div class="section-intro">
+    <h2><span class="ru">Что я делаю</span><span class="en">What I do</span></h2>
+    <p class="note"><span class="ru">Пять направлений, которые обычно идут в связке — сайт редко существует отдельно от того, как он объясняет продукт.</span><span class="en">Five areas that usually come as a set — a website rarely exists apart from how well it explains the product.</span></p>
+  </div>
+
+  <div class="pinout">
+    <div class="pin-row">
+      <div class="pin-tag">IN·01</div>
+      <div class="pin-name"><span class="ru">Сайты и лендинги</span><span class="en">Websites &amp; landing pages</span></div>
+      <div class="pin-desc"><span class="ru">От идеи до продакшена: структура, дизайн, вёрстка и код в одних руках.</span><span class="en">From idea to production: structure, design, markup and code, all in one hand.</span></div>
+    </div>
+    <div class="pin-row">
+      <div class="pin-tag">IN·02</div>
+      <div class="pin-name"><span class="ru">Магазины и каталоги</span><span class="en">Stores &amp; catalogs</span></div>
+      <div class="pin-desc"><span class="ru">Карточки товара, фильтры, оформление заказа — e-commerce, который не тормозит и не путает.</span><span class="en">Product cards, filters, checkout flow — e-commerce that stays fast and clear.</span></div>
+    </div>
+    <div class="pin-row">
+      <div class="pin-tag">IN·03</div>
+      <div class="pin-name"><span class="ru">Веб-дизайн (UI/UX)</span><span class="en">Web design (UI/UX)</span></div>
+      <div class="pin-desc"><span class="ru">Интерфейс, который держит сетку и типографику от макета до готового экрана.</span><span class="en">Interfaces that keep their grid and typography from mockup to shipped screen.</span></div>
+    </div>
+    <div class="pin-row">
+      <div class="pin-tag">OUT·01</div>
+      <div class="pin-name"><span class="ru">Техническая инфографика</span><span class="en">Technical infographics</span></div>
+      <div class="pin-desc"><span class="ru">Схемы устройства продукта, архитектуры, принципов работы — для сложных технических тем.</span><span class="en">Product architecture diagrams, how-it-works schematics — for genuinely technical subjects.</span></div>
+    </div>
+    <div class="pin-row">
+      <div class="pin-tag">OUT·02</div>
+      <div class="pin-name"><span class="ru">Документация и инструкции</span><span class="en">Documentation &amp; guides</span></div>
+      <div class="pin-desc"><span class="ru">Онбординг, мануалы, пошаговые инструкции — понятные не только инженерам.</span><span class="en">Onboarding flows, manuals, step-by-step guides — clear to more than just engineers.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="case">
+  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.02</span></div>
+  <div class="section-intro">
+    <h2><span class="ru">Кейс: Atios</span><span class="en">Case study: Atios</span></h2>
+    <p class="note"><span class="ru">Швейцарский производитель устройств для умного дома.</span><span class="en">A Swiss smart-home hardware manufacturer.</span></p>
+  </div>
+
+  <div class="case reveal">
+    <div class="case-visual">
+      <div class="slider-track" id="sliderTrack">
+
+        <div class="slide">
+          <img src="img/1.5x2.0.jpg" alt="Atios — схема ">
+        </div>
+        <div class="slide">
+          <img src="img/Atios SmartCore.png" alt="Atios — схема ">
+        </div>
+        <div class="slide">
+          <img src="img/Atios KNX Bridge.png" alt="Atios — схема ">
+        </div>
+        <div class="slide">
+          <img src="img/Atios LumaPort.png" alt="Atios — схема ">
+        </div>
+      </div>
+      <button class="slider-arrow prev" onclick="sliderMove(-1)" aria-label="Previous slide">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="slider-arrow next" onclick="sliderMove(1)" aria-label="Next slide">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="slider-dots" id="sliderDots"></div>
+      <div class="zoom-hint">
+        <span class="ru">⤢ Увеличить</span><span class="en">⤢ Enlarge</span>
+      </div>
+    </div>
+    <div class="case-body">
+      <div class="case-kicker"><span class="ru">КЛИЕНТ · ATIOS.CH · ШВЕЙЦАРИЯ</span><span class="en">CLIENT · ATIOS.CH · SWITZERLAND</span></div>
+      <h3><span class="ru">Как объяснить мост между протоколами</span><span class="en">Explaining a bridge between protocols</span></h3>
+      <p><span class="ru">Atios делает устройства, которые соединяют профессиональные системы автоматизации (KNX, DALI) с потребительскими экосистемами (Matter, Apple Home, Google Home). Моя задача — разработка инфографики, которая делает эту связку понятной инсталляторам и конечным пользователям без инженерного бэкграунда.</span><span class="en">Atios builds hardware that bridges professional automation systems (KNX, DALI) with consumer ecosystems (Matter, Apple Home, Google Home). My role: designing infographics that make this bridge understandable to installers and end users without an engineering background.</span></p>
+      <div class="case-tags">
+        <span class="ru">Схемы архитектуры</span><span class="en">Architecture diagrams</span>
+        <span class="ru">Инфографика продукта</span><span class="en">Product infographics</span>
+        <span class="ru">Материалы для интеграторов</span><span class="en">Installer-facing materials</span>
+      </div>
+      <div class="case-disclaimer">
+        <span class="ru">Схема выше — иллюстративная, построена на основе открытой информации с сайта клиента; конфиденциальные материалы не используются.</span>
+        <span class="en">The diagram above is illustrative, based on information public on the client's website; no confidential materials are used.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="process">
+  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.03</span></div>
+  <div class="section-intro">
+    <h2><span class="ru">Как проходит проект</span><span class="en">How a project runs</span></h2>
+    <p class="note"><span class="ru">Пять последовательных этапов — от брифа до поддержки после запуска.</span><span class="en">Five sequential stages — from brief to post-launch support.</span></p>
+  </div>
+  <div class="process">
+    <div class="step">
+      <span class="n">01</span>
+      <h3><span class="ru">Бриф</span><span class="en">Brief</span></h3>
+      <p><span class="ru">Цели, аудитория, ограничения</span><span class="en">Goals, audience, constraints</span></p>
+    </div>
+    <div class="step">
+      <span class="n">02</span>
+      <h3><span class="ru">Прототип</span><span class="en">Wireframe</span></h3>
+      <p><span class="ru">Структура и логика экранов</span><span class="en">Structure and screen logic</span></p>
+    </div>
+    <div class="step">
+      <span class="n">03</span>
+      <h3><span class="ru">Дизайн</span><span class="en">Design</span></h3>
+      <p><span class="ru">Стиль, типографика, макеты</span><span class="en">Style, type, layouts</span></p>
+    </div>
+    <div class="step">
+      <span class="n">04</span>
+      <h3><span class="ru">Разработка</span><span class="en">Build</span></h3>
+      <p><span class="ru">Вёрстка, код, интеграции</span><span class="en">Markup, code, integrations</span></p>
+    </div>
+    <div class="step">
+      <span class="n">05</span>
+      <h3><span class="ru">Запуск</span><span class="en">Launch</span></h3>
+      <p><span class="ru">Тесты, релиз, поддержка</span><span class="en">Testing, release, support</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="stack">
+  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.04</span></div>
+  <div class="section-intro">
+    <h2><span class="ru">Инструменты</span><span class="en">Tools &amp; stack</span></h2>
+  </div>
+  <div class="stack-grid">
+    <div class="chip">Figma</div>
+    <div class="chip">HTML / CSS / JS</div>
+    <div class="chip">React</div>
+    <!--div class="chip">Webflow</div-->
+    <div class="chip">Adobe Photoshop</div>
+    <div class="chip">Corel Draw</div>
+    <div class="chip">Framer Motion</div>
+    <div class="chip">Claude</div>
+    <div class="chip">ChatGPT</div>
+    <div class="chip">Qwen</div>
+  </div>
+</section>
+</div>
+
+<footer class="contact" id="contact">
+  <div class="contact-panel">
+    <div class="case-kicker"><span class="ru">СВЯЗАТЬСЯ</span><span class="en">GET IN TOUCH</span></div>
+    <h2><span class="ru">Обсудим ваш проект — сайт или схему</span><span class="en">Let's talk about your project — site or diagram</span></h2>
+    <div class="contact-links">
+      <a href="mailto:vpmail86@gmail.com" target="blank">vpmail86@gmail.com</a>
+      <a href="https://t.me/pilipeople" target="blank">Telegram</a>
+      <a href="https://www.linkedin.com/in/vadim-pilipenko-88729161/" target="blank">LinkedIn</a>
+      <a href="https://www.behance.net/vadimpilipenko" target="blank">Behance</a>
+    </div>
+  </div>
+
+  <div class="titleblock-footer">
+    <div class="fcell"><span class="ru">© 2026 Вадим Пилипенко</span><span class="en">© 2026 Vadim Pilipenko</span></div>
+    <div class="fcell">DOC. VP-PORTFOLIO · REV 2026.08 · SHEET 1/1</div>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="Наверх / Back to top">
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M5 13L12 6L19 13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M12 6V19" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+</button>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+  <button class="lightbox-arrow prev" id="lightboxPrev" aria-label="Previous">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <div class="lightbox-inner" id="lightboxInner"></div>
+  <button class="lightbox-arrow next" id="lightboxNext" aria-label="Next">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+
+<script>
+  function setLang(lang){
+    document.body.classList.toggle('lang-en', lang === 'en');
+    document.getElementById('btnRu').classList.toggle('active', lang === 'ru');
+    document.getElementById('btnEn').classList.toggle('active', lang === 'en');
+    document.documentElement.lang = lang;
+  }
+
+  const els = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:0.12});
+    els.forEach(el=>io.observe(el));
+  } else {
+    els.forEach(el=>el.classList.add('in'));
+  }
+
+  // burger menu
+  const burger = document.getElementById('burgerBtn');
+  const tbLinks = document.getElementById('tbLinks');
+  burger.addEventListener('click', ()=>{
+    const open = tbLinks.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open);
+  });
+  tbLinks.querySelectorAll('a').forEach(a=>{
+    a.addEventListener('click', ()=>{
+      tbLinks.classList.remove('open');
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  // scrollspy — highlight active nav link for the section in view
+  const navLinks = Array.from(tbLinks.querySelectorAll('a'));
+  const spySections = navLinks
+    .map(a => document.querySelector(a.getAttribute('href')))
+    .filter(Boolean);
+  function setActiveLink(id){
+    navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+  }
+  if('IntersectionObserver' in window){
+    const spy = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting) setActiveLink(entry.target.id);
+      });
+    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+    spySections.forEach(sec => spy.observe(sec));
+  }
+
+  // back to top
+  const toTop = document.getElementById('toTop');
+  window.addEventListener('scroll', ()=>{
+    toTop.classList.toggle('show', window.scrollY > 500);
+  }, { passive:true });
+  toTop.addEventListener('click', ()=>{
+    window.scrollTo({ top:0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  });
+
+  // case-study image slider
+  let sliderIndex = 0;
+  const sliderTrack = document.getElementById('sliderTrack');
+  const slides = sliderTrack.querySelectorAll('.slide');
+  const sliderDots = document.getElementById('sliderDots');
+  slides.forEach((_, i)=>{
+    const dot = document.createElement('button');
+    dot.className = 'dot';
+    dot.setAttribute('aria-label', 'Slide ' + (i + 1));
+    dot.addEventListener('click', ()=>{ sliderIndex = i; updateSlider(); });
+    sliderDots.appendChild(dot);
+  });
+  function updateSlider(){
+    sliderTrack.style.transform = `translateX(-${sliderIndex * 100}%)`;
+    sliderDots.querySelectorAll('.dot').forEach((d, i)=> d.classList.toggle('active', i === sliderIndex));
+  }
+  function sliderMove(dir){
+    sliderIndex = (sliderIndex + dir + slides.length) % slides.length;
+    updateSlider();
+  }
+  updateSlider();
+
+  // click-to-zoom lightbox
+  // speed setting shared with the card slider — change --slide-speed in :root to adjust both
+  const SLIDE_SPEED_MS = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--slide-speed')) || 400;
+
+  const lightbox = document.getElementById('lightbox');
+  const lightboxInner = document.getElementById('lightboxInner');
+  const lightboxClose = document.getElementById('lightboxClose');
+  const lightboxPrev = document.getElementById('lightboxPrev');
+  const lightboxNext = document.getElementById('lightboxNext');
+  const lightboxCaption = document.getElementById('lightboxCaption');
+
+  function renderLightboxSlide(index){
+    const slide = slides[index];
+    lightboxInner.innerHTML = '';
+    const img = slide.querySelector('img');
+    const svg = slide.querySelector('svg');
+    if(slide.classList.contains('empty')) return false;
+    if(img && img.style.display !== 'none' && img.complete && img.naturalWidth > 0){
+      const clone = document.createElement('img');
+      clone.src = img.src;
+      clone.alt = img.alt;
+      lightboxInner.appendChild(clone);
+    } else if(svg){
+      lightboxInner.appendChild(svg.cloneNode(true));
+    } else {
+      return false;
+    }
+    lightboxCaption.textContent = String(index + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+    return true;
+  }
+
+  function openLightbox(index){
+    if(!renderLightboxSlide(index)) return;
+    sliderIndex = index;
+    updateSlider();
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+    lightboxInner.innerHTML = '';
+    document.body.style.overflow = '';
+  }
+  function lightboxMove(dir){
+    const nextIndex = (sliderIndex + dir + slides.length) % slides.length;
+    lightboxInner.classList.add('fading');
+    setTimeout(()=>{
+      if(!renderLightboxSlide(nextIndex)){ lightboxInner.classList.remove('fading'); return; }
+      sliderIndex = nextIndex;
+      updateSlider();
+      lightboxInner.classList.remove('fading');
+    }, SLIDE_SPEED_MS / 2);
+  }
+
+  slides.forEach((slide, i)=>{
+    slide.addEventListener('click', ()=> openLightbox(i));
+  });
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightboxPrev.addEventListener('click', ()=> lightboxMove(-1));
+  lightboxNext.addEventListener('click', ()=> lightboxMove(1));
+  lightbox.addEventListener('click', (e)=>{ if(e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e)=>{
+    if(!lightbox.classList.contains('open')) return;
+    if(e.key === 'Escape') closeLightbox();
+    if(e.key === 'ArrowLeft') lightboxMove(-1);
+    if(e.key === 'ArrowRight') lightboxMove(1);
+  });
+</script>
+
+</body>
+</html>
