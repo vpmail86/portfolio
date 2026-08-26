@@ -143,7 +143,7 @@
     letter-spacing:0.06em;
   }
 
-  #services, #case, #process, #stack, #contact{ scroll-margin-top:80px; }
+  #services, #case, #projects, #process, #stack, #contact{ scroll-margin-top:80px; }
 
   /* ---------- hero ---------- */
   .hero{ padding:64px 0 60px 22px; }
@@ -195,6 +195,8 @@
     padding:20px 18px; border-right:1px solid var(--line);
   }
   .pin-name{ padding:20px 18px; font-weight:500; font-size:17px; border-right:1px solid var(--line); }
+  .pin-name a{ color:var(--ink); text-decoration:none; border-bottom:1.5px solid var(--signal); padding-bottom:1px; }
+  .pin-name a:hover{ color:var(--signal); }
   .pin-desc{ padding:20px 18px; font-size:14.5px; color:var(--muted); line-height:1.55; }
   @media (min-width:900px){
     .pin-name{ font-size:19px; }
@@ -488,6 +490,7 @@
   <nav class="tb-links" id="tbLinks">
     <a href="#services"><span class="ru">Услуги</span><span class="en">Services</span></a>
     <a href="#case"><span class="ru">Кейсы</span><span class="en">Case study</span></a>
+    <a href="#projects"><span class="ru">Проекты</span><span class="en">Projects</span></a>
     <a href="#process"><span class="ru">Процесс</span><span class="en">Process</span></a>
     <a href="#stack"><span class="ru">Инструменты</span><span class="en">Stack</span></a>
     <a href="#contact"><span class="ru">Контакты</span><span class="en">Contact</span></a>
@@ -629,8 +632,44 @@
   </div>
 </section>
 
-<section class="section" id="process">
+<section class="section" id="projects">
   <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.03</span></div>
+  <div class="section-intro">
+    <h2><span class="ru">Реализованные проекты</span><span class="en">Live projects</span></h2>
+    <p class="note"><span class="ru">Сайты и магазины, которые работают в проде — разные платформы и задачи.</span><span class="en">Sites and stores in production — different platforms, different tasks.</span></p>
+  </div>
+
+  <div class="pinout">
+    <div class="pin-row">
+      <div class="pin-tag">WP</div>
+      <div class="pin-name"><a href="https://evropribor.by/" target="_blank" rel="noopener">evropribor.by ↗</a></div>
+      <div class="pin-desc"><span class="ru">Научно-производственный центр</span><span class="en">Scientific &amp; production center</span></div>
+    </div>
+    <div class="pin-row">
+      <div class="pin-tag">TILDA</div>
+      <div class="pin-name"><a href="https://nordmax.by/" target="_blank" rel="noopener">nordmax.by ↗</a></div>
+      <div class="pin-desc"><span class="ru">Производство домов и бань из профилированного бруса</span><span class="en">Timber houses &amp; bathhouses manufacturer</span></div>
+    </div>
+    <div class="pin-row">
+      <div class="pin-tag">OC</div>
+      <div class="pin-name"><a href="https://misterplitkin.by/" target="_blank" rel="noopener">misterplitkin.by ↗</a></div>
+      <div class="pin-desc"><span class="ru">Товары для благоустройства участка</span><span class="en">Outdoor &amp; landscaping supplies</span></div>
+    </div>
+    <div class="pin-row">
+      <div class="pin-tag">TILDA</div>
+      <div class="pin-name"><a href="https://golfplus.travel/" target="_blank" rel="noopener">golfplus.travel ↗</a></div>
+      <div class="pin-desc"><span class="ru">Туристическая компания</span><span class="en">Travel agency</span></div>
+    </div>
+    <div class="pin-row">
+      <div class="pin-tag">CUSTOM</div>
+      <div class="pin-name"><a href="https://albico.by/" target="_blank" rel="noopener">albico.by ↗</a></div>
+      <div class="pin-desc"><span class="ru">Кухонные панели</span><span class="en">Kitchen wall panels</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="process">
+  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.04</span></div>
   <div class="section-intro">
     <h2><span class="ru">Как проходит проект</span><span class="en">How a project runs</span></h2>
     <p class="note"><span class="ru">Пять последовательных этапов — от брифа до поддержки после запуска.</span><span class="en">Five sequential stages — from brief to post-launch support.</span></p>
@@ -665,7 +704,7 @@
 </section>
 
 <section class="section" id="stack">
-  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.04</span></div>
+  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.05</span></div>
   <div class="section-intro">
     <h2><span class="ru">Инструменты</span><span class="en">Tools &amp; stack</span></h2>
   </div>
@@ -806,8 +845,8 @@
   updateSlider();
 
   // click-to-zoom lightbox
-  // speed setting shared with the card slider — change --slide-speed in :root to adjust both
-  const SLIDE_SPEED_MS = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--slide-speed')) || 400;
+  // speed settings: --slide-speed controls the card slider, --lightbox-slide-speed controls the fade in the zoomed view
+  const LIGHTBOX_SPEED_MS = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--lightbox-slide-speed')) || 300;
 
   const lightbox = document.getElementById('lightbox');
   const lightboxInner = document.getElementById('lightboxInner');
@@ -856,7 +895,7 @@
       sliderIndex = nextIndex;
       updateSlider();
       lightboxInner.classList.remove('fading');
-    }, SLIDE_SPEED_MS / 2);
+    }, LIGHTBOX_SPEED_MS / 2);
   }
 
   slides.forEach((slide, i)=>{
