@@ -603,14 +603,12 @@
   .case-tags span:hover{ background:var(--signal); border-color:var(--signal); color:#fff; }
 
   /* process: always-dark cards, green on hover, scanning line */
-  .process .step{ background:var(--dark-bg); color:var(--dark-fg); position:relative; overflow:hidden; transition:background .25s; border-left-color:#26343D; }
-  .process .step p{ color:var(--dark-muted); }
-  .process .step .n{ color:#2FD08F; }
+  .process .step{ position:relative; overflow:hidden; transition:background .25s; }
   .process .step::after{
-    content:""; position:absolute; left:0; bottom:0; height:3px; width:0; background:#2FD08F; transition:width .4s ease;
+    content:""; position:absolute; left:0; bottom:0; height:3px; width:0; background:var(--signal); transition:width .4s ease;
   }
   .process .step:hover::after{ width:100%; }
-  .process .step:hover{ background:#16222B; }
+  .process .step:hover{ background:var(--signal-soft); }
 
   /* chips */
   .chip{ transition:transform .18s ease, background .18s, color .18s; cursor:default; }
@@ -619,14 +617,12 @@
   /* contact: always-dark panel with blueprint grid */
   .contact-panel{
     background:
-      linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px) 0 0/28px 28px,
-      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px) 0 0/28px 28px,
-      var(--dark-bg);
-    color:var(--dark-fg); border-color:var(--dark-bg);
+      linear-gradient(var(--line) 1px, transparent 1px) 0 0/28px 28px,
+      linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0/28px 28px,
+      var(--card);
+    background-blend-mode:normal;
   }
-  .contact-panel .case-kicker{ color:#2FD08F; }
-  .contact-links a:hover{ color:#2FD08F; }
-  body.dark .contact-panel{ border-color:var(--line-strong); }
+  .contact-panel .case-kicker{ color:var(--signal); }
 
   /* staggered reveal (animation, so it won't fight hover transforms) */
   .rv{ opacity:0; }
