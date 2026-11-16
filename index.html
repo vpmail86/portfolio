@@ -108,19 +108,6 @@
   .burger.open span:nth-child(2){ opacity:0; }
   .burger.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
 
-  @media (max-width:760px){
-    .burger{ display:flex; }
-    nav.tb-links{
-      position:fixed; top:63px; left:0; right:0; z-index:60;
-      flex-direction:column; gap:0;
-      background:var(--paper); border-bottom:1.5px solid var(--ink);
-      max-height:0; overflow:hidden; transition:max-height .28s ease;
-    }
-    nav.tb-links.open{ max-height:320px; }
-    nav.tb-links a{
-      padding:16px var(--gap); border-top:1px solid var(--line); font-size:14px;
-    }
-  }
 
   .wrap{ padding:0 var(--gap); position:relative; }
 
@@ -786,6 +773,75 @@
     .term .cmd{ width:var(--w); }
     .term.in .cmd, .term.in .out, .term.in .l2, .term.in .l3, .term.in .l4{ animation:none; }
   }
+
+  /* =====================================================
+     MOBILE MENU — полноэкранная DOS-оболочка
+     ===================================================== */
+  @media (max-width:760px){
+    .burger{ display:flex; }
+
+    /* backdrop-filter делает шапку контейнером для fixed-потомков —
+       на время открытого меню отключаем его */
+    header.titleblock:has(nav.tb-links.open){ backdrop-filter:none; -webkit-backdrop-filter:none; }
+    body:has(nav.tb-links.open) .to-top{ display:none; }
+
+    nav.tb-links{
+      position:fixed; top:var(--hb,52px); left:0; right:0; bottom:0; z-index:60;
+      display:flex; flex-direction:column; gap:0; counter-reset:m;
+      background:#05090B; color:#2FD08F; border-bottom:none;
+      overflow-y:auto; -webkit-overflow-scrolling:touch;
+      font-family:'VT323',var(--mono);
+      opacity:0; visibility:hidden; transform:translateY(-10px);
+      transition:opacity .2s ease, transform .2s ease, visibility 0s linear .2s;
+    }
+    nav.tb-links.open{ opacity:1; visibility:visible; transform:none; transition-delay:0s; }
+
+    nav.tb-links::before{
+      content:"■ MENU.EXE"; flex:none; display:block;
+      height:32px; line-height:32px; padding:0 16px;
+      background:#2FD08F; color:#05090B; font-size:21px; letter-spacing:.08em;
+    }
+
+    nav.tb-links a{
+      counter-increment:m;
+      display:flex; align-items:baseline; gap:.55em;
+      padding:20px 20px 18px; border-top:none;
+      border-bottom:1px dashed rgba(47,208,143,.28);
+      font-family:'VT323',var(--mono); font-size:38px; line-height:1;
+      letter-spacing:.04em; text-transform:uppercase; font-weight:400;
+      color:#2FD08F; text-shadow:0 0 8px rgba(47,208,143,.5);
+    }
+    nav.tb-links a::before{ content:"0" counter(m) "."; font-size:.62em; color:#7F9AA6; text-shadow:none; }
+    nav.tb-links a:hover, nav.tb-links a:active, nav.tb-links a.active{
+      background:#2FD08F; color:#05090B; font-weight:400; text-shadow:none;
+    }
+    nav.tb-links a:hover::before, nav.tb-links a:active::before, nav.tb-links a.active::before{ color:#05090B; }
+    nav.tb-links a.active::after{ content:"█"; margin-left:auto; font-size:.8em; animation:blink 1s steps(1) infinite; }
+
+    nav.tb-links::after{
+      content:"↑↓ ВЫБОР · TAP = ENTER · ESC = ЗАКРЫТЬ";
+      margin-top:auto; flex:none; display:block;
+      padding:12px 16px; background:#0E161B; color:#7F9AA6;
+      border-top:1px solid rgba(47,208,143,.35); font-size:19px; letter-spacing:.06em;
+    }
+    body.lang-en nav.tb-links::after{ content:"↑↓ SELECT · TAP = ENTER · ESC = CLOSE"; }
+
+    nav.tb-links.open a{ animation:menu-in .28s steps(5) backwards; }
+    nav.tb-links.open a:nth-child(1){ animation-delay:.05s; }
+    nav.tb-links.open a:nth-child(2){ animation-delay:.10s; }
+    nav.tb-links.open a:nth-child(3){ animation-delay:.15s; }
+    nav.tb-links.open a:nth-child(4){ animation-delay:.20s; }
+    nav.tb-links.open a:nth-child(5){ animation-delay:.25s; }
+    nav.tb-links.open a:nth-child(6){ animation-delay:.30s; }
+    @keyframes menu-in{ from{ opacity:0; transform:translateX(-14px); } }
+
+    .burger.open{ background:var(--signal); border-color:var(--signal); }
+    .burger.open span{ background:#05090B; }
+  }
+  @media (max-width:760px) and (prefers-reduced-motion: reduce){
+    nav.tb-links, nav.tb-links.open a{ transition:none; animation:none; }
+    nav.tb-links.open a.active::after{ animation:none; }
+  }
 </style>
 </head>
 <body>
@@ -1156,6 +1212,21 @@
       burger.classList.remove('open');
       burger.setAttribute('aria-expanded', 'false');
     });
+  });
+
+  // полноэкранное меню: высота шапки, блокировка прокрутки, Esc
+  const hdr = document.querySelector('.titleblock');
+  const syncMenu = () => {
+    document.documentElement.style.setProperty('--hb', hdr.offsetHeight + 'px');
+    document.body.style.overflow = tbLinks.classList.contains('open') ? 'hidden' : '';
+  };
+  burger.addEventListener('click', syncMenu);
+  tbLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { document.body.style.overflow = ''; }));
+  addEventListener('keydown', e => {
+    if (e.key === 'Escape' && tbLinks.classList.contains('open')) burger.click();
+  });
+  addEventListener('resize', () => {
+    if (innerWidth > 760 && tbLinks.classList.contains('open')) burger.click();
   });
 
   // scrollspy — highlight active nav link for the section in view
