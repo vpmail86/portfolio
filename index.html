@@ -522,28 +522,38 @@
   .hero h1::after{ content:"_"; color:var(--signal); animation:blink 1s steps(1) infinite; }
   @keyframes blink{ 50%{ opacity:0; } }
 
-  /* hero: circuit traces that draw themselves */
-  .traces{
-    position:absolute; right:0; top:48px; width:min(36vw,440px); z-index:-1;
-    opacity:.6; pointer-events:none; overflow:visible;
+  
+  /* hero: вращающийся каркасный куб (векторная графика 80-х) */
+  .wire{
+    --s:clamp(110px,13vw,170px);
+    position:absolute; right:clamp(20px,5vw,90px); top:56px; z-index:-1;
+    width:calc(var(--s)*1.9); height:calc(var(--s)*1.9);
+    perspective:900px; pointer-events:none; opacity:.85;
   }
-  .traces path{
-    fill:none; stroke:var(--signal); stroke-width:2; stroke-linejoin:round; stroke-linecap:round;
-    stroke-dasharray:1; stroke-dashoffset:1;
-    animation:draw 2.2s cubic-bezier(.5,0,.2,1) forwards;
+  .wire-cube{
+    position:absolute; left:50%; top:50%; width:var(--s); height:var(--s);
+    margin:calc(var(--s)/-2) 0 0 calc(var(--s)/-2);
+    transform-style:preserve-3d; animation:wspin 18s linear infinite;
   }
-  .traces path:nth-of-type(2){ animation-delay:.35s; }
-  .traces path:nth-of-type(3){ animation-delay:.7s; }
-  .traces path:nth-of-type(4){ animation-delay:1.05s; stroke:var(--line-strong); }
-  .traces circle{
-    fill:var(--paper); stroke:var(--signal); stroke-width:2;
-    transform-box:fill-box; transform-origin:center; transform:scale(0);
-    animation:pop .4s cubic-bezier(.3,1.6,.5,1) forwards; animation-delay:2s;
+  .wire-cube.in{ --s:calc(var(--s0)*.5); animation:wspin-r 11s linear infinite; }
+  .wire-cube i{
+    position:absolute; inset:0; border:2px solid var(--signal);
+    background:rgba(47,208,143,.03); box-shadow:0 0 12px rgba(47,208,143,.25) inset;
   }
-  .traces circle:nth-of-type(even){ animation-delay:2.25s; }
-  @keyframes draw{ to{ stroke-dashoffset:0; } }
-  @keyframes pop{ to{ transform:scale(1); } }
-  @media (max-width:1100px){ .traces{ display:none; } }
+  .wire-cube i:nth-child(1){ transform:translateZ(calc(var(--s)/2)); }
+  .wire-cube i:nth-child(2){ transform:rotateY(180deg) translateZ(calc(var(--s)/2)); }
+  .wire-cube i:nth-child(3){ transform:rotateY(90deg) translateZ(calc(var(--s)/2)); }
+  .wire-cube i:nth-child(4){ transform:rotateY(-90deg) translateZ(calc(var(--s)/2)); }
+  .wire-cube i:nth-child(5){ transform:rotateX(90deg) translateZ(calc(var(--s)/2)); }
+  .wire-cube i:nth-child(6){ transform:rotateX(-90deg) translateZ(calc(var(--s)/2)); }
+  .wire-cube.in i{ border-color:var(--line-strong); }
+  @keyframes wspin{ from{ transform:rotateX(-24deg) rotateY(0); } to{ transform:rotateX(-24deg) rotateY(360deg); } }
+  @keyframes wspin-r{ from{ transform:rotateX(-24deg) rotateY(360deg); } to{ transform:rotateX(-24deg) rotateY(0); } }
+  .wire-tag{
+    position:absolute; left:0; right:0; bottom:0; text-align:center;
+    font-family:'VT323',var(--mono); font-size:18px; letter-spacing:.08em; color:var(--muted);
+  }
+  @media (max-width:1100px){ .wire{ display:none; } }
 
   /* pulsing "via" markers */
   .sheet-marker .via{ animation:ping 2.6s ease-out infinite; }
@@ -634,10 +644,8 @@
   @keyframes rise{ from{ opacity:0; transform:translateY(18px); } }
 
   @media (prefers-reduced-motion: reduce){
-    .ticker-track, .sheet-marker .via, .hero h1::after{ animation:none; }
+    .ticker-track, .sheet-marker .via, .hero h1::after, .wire-cube{ animation:none; }
     .rv{ opacity:1; } .rv.in{ animation:none; }
-    .traces path{ animation:none; stroke-dashoffset:0; }
-    .traces circle{ animation:none; transform:none; }
   }
 
   /* =====================================================
@@ -822,16 +830,11 @@
 <div class="spine"></div>
 
 <section class="hero">
-  <svg class="traces" viewBox="0 0 440 320" aria-hidden="true">
-    <path pathLength="1" d="M0 50 H130 L170 90 H310 L350 50 H440"/>
-    <path pathLength="1" d="M0 150 H90 L130 190 H270 V260 H440"/>
-    <path pathLength="1" d="M70 320 V240 L110 200 H210 V120 L250 80 H300"/>
-    <path pathLength="1" d="M440 130 H370 L340 160 H330 V230"/>
-    <circle cx="440" cy="50" r="6"/>
-    <circle cx="440" cy="260" r="6"/>
-    <circle cx="300" cy="80" r="6"/>
-    <circle cx="330" cy="230" r="6"/>
-  </svg>
+  <div class="wire" aria-hidden="true" style="--s0:clamp(110px,13vw,170px)">
+    <div class="wire-cube"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="wire-cube in"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="wire-tag">OBJ: CUBE.3D</div>
+  </div>
 
   <div class="hero-doc">
     <span class="dot"></span>
