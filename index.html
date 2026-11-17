@@ -351,6 +351,11 @@
   @media (min-width:900px){ .chip{ font-size:15px; padding:12px 20px; } }
   .chip::before{ content:""; width:6px; height:6px; border-radius:50%; background:var(--signal); }
 
+
+  /* chip icons (monochrome, follow text color) */
+  .chip::before{ display:none; }
+  .chip .ico{ width:1.25em; height:1.25em; flex:none; display:block; }
+
   /* ---------- contact ---------- */
   footer.contact{ padding:80px var(--gap) 0; border-top:1px solid var(--line); }
   .contact-panel{
@@ -499,6 +504,25 @@
   .hero{ position:relative; isolation:isolate; }
   .hero h1::after{ content:"_"; color:var(--signal); animation:blink 1s steps(1) infinite; }
   @keyframes blink{ 50%{ opacity:0; } }
+
+  /* ---------- hero image ---------- */
+  .hero-art{
+    position:absolute; top:0; bottom:0; right:0;
+    width:min(45%, 640px);
+    z-index:-1;               /* под текстом (у .hero уже isolation:isolate) */
+    pointer-events:none;
+    display:flex; align-items:stretch; justify-content:flex-end;
+  }
+  .hero-art img{
+    height:100%; width:100%;
+    object-fit:contain;       /* без искажения пропорций */
+    object-position:right center;
+    opacity:.2;
+    display:block;
+  }
+  @media (max-width:760px){
+    .hero-art{ width:70%; }
+  }
 
   /* hero: вращающийся каркасный куб (векторная графика 80-х) */
   .wire{
@@ -880,6 +904,10 @@
 <div class="spine"></div>
 
 <section class="hero section">
+  <div class="hero-art" aria-hidden="true">
+    <img src="img/img-pvv-l.png" alt="">
+  </div>
+
   <!--div class="wire" aria-hidden="true" style="--s0:clamp(110px,13vw,170px)">
     <div class="wire-cube"><i></i><i></i><i></i><i></i><i></i><i></i></div>
     <div class="wire-cube in"><i></i><i></i><i></i><i></i><i></i><i></i></div>
@@ -1125,16 +1153,16 @@
     <h2><span class="ru">Инструменты</span><span class="en">Tools &amp; stack</span></h2>
   </div>
   <div class="stack-grid">
-    <div class="chip">Figma</div>
-    <div class="chip">HTML / CSS / JS</div>
-    <div class="chip">React</div>
+    <div class="chip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2h3v6H9a3 3 0 010-6z"/><path d="M12 2h3a3 3 0 010 6h-3z"/><path d="M9 8h3v6H9a3 3 0 010-6z"/><circle cx="15" cy="11" r="3"/><path d="M12 14v3a3 3 0 11-3-3z"/></svg>Figma</div>
+    <div class="chip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7l-5 5 5 5"/><path d="M16 7l5 5-5 5"/><path d="M14 4l-4 16"/></svg>HTML / CSS / JS</div>
+    <div class="chip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg>React</div>
     <!--div class="chip">Webflow</div-->
-    <div class="chip">Adobe Photoshop</div>
-    <div class="chip">Corel Draw</div>
-    <div class="chip">Framer Motion</div>
-    <div class="chip">Claude</div>
-    <div class="chip">ChatGPT</div>
-    <div class="chip">Qwen</div>
+    <div class="chip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="2"/><path d="M7 17V8h3a2.5 2.5 0 010 5H7"/><path d="M17 10.5c-1.5-.8-3 0-3 .9 0 1.6 3.2 1 3.2 2.6 0 1-1.6 1.7-3.2.8"/></svg>Adobe Photoshop</div>
+    <div class="chip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l6 9-6 11-6-11z"/><path d="M12 11v11"/><circle cx="12" cy="9" r="1.5" fill="currentColor" stroke="none"/></svg>Corel Draw</div>
+    <div class="chip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 2h14v6.5h-7zM5 8.5h7l7 6.5H5zM5 15h7v7z" fill="currentColor" stroke="none"/></svg>Framer Motion</div>
+    <div class="chip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/></svg>Claude</div>
+    <div class="chip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5l8.2 4.75v9.5L12 21.5l-8.2-4.75v-9.5z"/><path d="M12 8l4 2.3v4.4L12 17l-4-2.3v-4.4z"/></svg>ChatGPT</div>
+    <div class="chip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7.5"/><path d="M14 14l6 6"/></svg>Qwen</div>
   </div>
 </section>
 </div>
