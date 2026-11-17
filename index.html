@@ -173,7 +173,7 @@
   /* ---------- pinout / services table ---------- */
   .pinout{ border:1.5px solid var(--ink); border-radius:var(--radius); overflow:hidden; }
   .pin-row{
-    display:grid; grid-template-columns:120px 1fr 1.4fr;
+    display:grid; grid-template-columns:90px 1fr 1.4fr;
     border-top:1px solid var(--line); align-items:center;
   }
   .pin-row:first-child{ border-top:none; }
@@ -496,17 +496,7 @@
     background:var(--signal); box-shadow:0 0 12px var(--signal);
   }
 
-  /* hero: grid lights up under the cursor */
   .hero{ position:relative; isolation:isolate; }
-  .hero::before{
-    content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
-    background:
-      linear-gradient(var(--signal) 1px, transparent 1px) 0 0/32px 32px,
-      linear-gradient(90deg, var(--signal) 1px, transparent 1px) 0 0/32px 32px;
-    opacity:.55;
-    -webkit-mask:radial-gradient(200px circle at var(--mx,-999px) var(--my,-999px), #000, transparent);
-            mask:radial-gradient(200px circle at var(--mx,-999px) var(--my,-999px), #000, transparent);
-  }
   .hero h1::after{ content:"_"; color:var(--signal); animation:blink 1s steps(1) infinite; }
   @keyframes blink{ 50%{ opacity:0; } }
 
@@ -1371,17 +1361,6 @@
     };
     addEventListener('scroll', onScroll, { passive:true });
     addEventListener('resize', onScroll); onScroll();
-
-    // hero cursor spotlight
-    const hero = document.querySelector('.hero');
-    hero.addEventListener('pointermove', e => {
-      const r = hero.getBoundingClientRect();
-      hero.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-      hero.style.setProperty('--my', (e.clientY - r.top) + 'px');
-    });
-    hero.addEventListener('pointerleave', () => {
-      hero.style.removeProperty('--mx'); hero.style.removeProperty('--my');
-    });
 
     // staggered reveal
     const rio = new IntersectionObserver(es => es.forEach(e => {
