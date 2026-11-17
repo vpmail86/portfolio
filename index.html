@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vadim Pilipenko — Web &amp; Technical Design</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=Tektur:wght@500;600;700;800&family=VT323&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Tektur:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --paper: #EAEFF0;
@@ -18,9 +19,9 @@
     --signal-soft: #DCF0E6;
     --warn: #C97A1F;
     --card: #F5F7F6;
-    --mono: 'IBM Plex Mono', monospace;
-    --sans: 'IBM Plex Sans', sans-serif;
-    --cond: 'Tektur', sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, 'Courier New', monospace;
+    --sans: var(--mono);
+    --cond: 'Tektur', 'IBM Plex Mono', sans-serif;
     --gap: clamp(20px, 5vw, 20px);
     --radius: 18px;
     --slide-speed: 1000ms;
@@ -42,7 +43,7 @@
   }
   ::selection{ background:var(--signal); color:#fff; }
   a{ color:inherit; }
-  h1,h2,h3{ margin:0; font-family:var(--cond); font-weight:normal; letter-spacing:0.02em; text-transform:uppercase; }
+  h1,h2,h3{ margin:0; font-family:var(--cond); font-weight:500; letter-spacing:0.02em; text-transform:uppercase; }
   .mono{ font-family:var(--mono); }
 
   /* ---------- language toggle ---------- */
@@ -61,7 +62,7 @@
   }
   .lang-switch button{
     border:none; background:transparent; padding:7px 10px; cursor:pointer;
-    color:var(--muted); letter-spacing:0.04em;
+    color:var(--muted); letter-spacing:0.04em; font-family:inherit;
   }
   .lang-switch button.active{ background:var(--ink); color:var(--paper); }
 
@@ -142,7 +143,7 @@
   }
   .hero-doc .dot{ width:6px; height:6px; border-radius:50%; background:var(--signal); flex-shrink:0; }
   .hero h1{ font-size:clamp(50px,5.8vw,105px); line-height:1.08; margin-bottom:20px; }
-  .hero h1 d { font-family: var(--mono);font-weight: 300;color: var(--muted); display: block; font-size: 22px; }
+  .hero h1 d { font-family: var(--cond); font-weight:400; color: var(--muted); display: block; font-size: 22px; }
   .hero-sub{ font-size:19px; color:var(--muted); max-width:56ch; line-height:1.6; margin-bottom:44px; }
   @media (min-width:900px){ .hero-sub{ font-size:21px; } }
 
@@ -509,7 +510,6 @@
   .hero h1::after{ content:"_"; color:var(--signal); animation:blink 1s steps(1) infinite; }
   @keyframes blink{ 50%{ opacity:0; } }
 
-  
   /* hero: вращающийся каркасный куб (векторная графика 80-х) */
   .wire{
     --s:clamp(110px,13vw,170px);
@@ -538,7 +538,7 @@
   @keyframes wspin-r{ from{ transform:rotateX(-24deg) rotateY(360deg); } to{ transform:rotateX(-24deg) rotateY(0); } }
   .wire-tag{
     position:absolute; left:0; right:0; bottom:0; text-align:center;
-    font-family:'VT323',var(--mono); font-size:18px; letter-spacing:.08em; color:var(--muted);
+    font-family:var(--mono); font-size:13px; letter-spacing:.08em; color:var(--muted);
   }
   @media (max-width:1100px){ .wire{ display:none; } }
 
@@ -648,16 +648,16 @@
 
   :is(.pinout,.case,.process,.term)::before{
     content:var(--wt,""); display:block; grid-column:1/-1;
-    height:30px; line-height:30px; padding:0 96px 0 12px;
+    height:30px; line-height:30px; padding:0 110px 0 12px;
     background:var(--ink); color:var(--paper);
-    font-family:'VT323',var(--mono); font-size:19px; letter-spacing:.06em;
+    font-family:var(--cond); font-weight:500; font-size:14px; letter-spacing:.08em;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     border-bottom:1.5px solid var(--ink);
   }
   :is(.pinout,.case,.process,.term)::after{
     content:"_  □  ×"; position:absolute; top:0; right:0;
     height:30px; line-height:30px; padding:0 14px;
-    color:var(--paper); font-family:'VT323',var(--mono); font-size:19px;
+    color:var(--paper); font-family:var(--mono); font-size:14px;
     letter-spacing:.12em; white-space:pre; pointer-events:none;
   }
   body.dark :is(.pinout,.case,.process,.term)::before{
@@ -672,7 +672,7 @@
   .term{ --wt:"■ C:\\VP\\TERMINAL.EXE"; }
 
   /* пиксельные акценты */
-  .sheet-marker .tag{ font-family:'VT323',var(--mono); font-size:19px; font-weight:400; }
+  .sheet-marker .tag{ font-family:var(--mono); font-size:12px; font-weight:600; }
   .hero h1{ text-shadow:3px 3px 0 rgba(18,138,92,.28); }
   .hero h1 d{ text-shadow:none; }
   body.dark .hero h1{ text-shadow:3px 3px 0 rgba(47,208,143,.3); }
@@ -688,8 +688,8 @@
   .term-sec{ padding:56px 0 76px 22px; }
   .term{ border:1.5px solid var(--ink); background:#05090B; overflow:hidden; }
   .term-body{
-    color:#2FD08F; font-family:'VT323',var(--mono);
-    font-size:clamp(18px,2.6vw,24px); line-height:1.4;
+    color:#2FD08F; font-family:var(--mono);
+    font-size:clamp(14px,2.2vw,18px); line-height:1.5;
     padding:20px 22px 26px; min-height:210px;
     text-shadow:0 0 6px rgba(47,208,143,.45);
   }
@@ -753,7 +753,7 @@
   .boot{
     display:none; position:fixed; inset:0; z-index:500; cursor:pointer;
     background:#05090B; color:#2FD08F;
-    font-family:'VT323',var(--mono); font-size:clamp(18px,2.4vw,26px); line-height:1.3;
+    font-family:var(--mono); font-size:clamp(13px,1.9vw,20px); line-height:1.4;
     padding:clamp(20px,5vw,56px); transition:opacity .45s ease;
   }
   .boot.on{ display:block; }
@@ -791,7 +791,7 @@
       display:flex; flex-direction:column; gap:0; counter-reset:m;
       background:#05090B; color:#2FD08F; border-bottom:none;
       overflow-y:auto; -webkit-overflow-scrolling:touch;
-      font-family:'VT323',var(--mono);
+      font-family:var(--mono);
       opacity:0; visibility:hidden; transform:translateY(-10px);
       transition:opacity .2s ease, transform .2s ease, visibility 0s linear .2s;
     }
@@ -800,7 +800,7 @@
     nav.tb-links::before{
       content:"■ MENU.EXE"; flex:none; display:block;
       height:32px; line-height:32px; padding:0 16px;
-      background:#2FD08F; color:#05090B; font-size:21px; letter-spacing:.08em;
+      background:#2FD08F; color:#05090B; font-family:var(--cond); font-size:15px; letter-spacing:.08em;
     }
 
     nav.tb-links a{
@@ -808,13 +808,13 @@
       display:flex; align-items:baseline; gap:.55em;
       padding:20px 20px 18px; border-top:none;
       border-bottom:1px dashed rgba(47,208,143,.28);
-      font-family:'VT323',var(--mono); font-size:34px; line-height:1;
-      letter-spacing:.04em; text-transform:uppercase; font-weight:400;
+      font-family:var(--cond); font-size:26px; line-height:1;
+      letter-spacing:.04em; text-transform:uppercase; font-weight:500;
       color:#2FD08F; text-shadow:0 0 8px rgba(47,208,143,.5);
     }
-    nav.tb-links a::before{ content:"0" counter(m) "."; font-size:.62em; color:#7F9AA6; text-shadow:none; }
+    nav.tb-links a::before{ content:"0" counter(m) "."; font-family:var(--mono); font-size:.55em; color:#7F9AA6; text-shadow:none; }
     nav.tb-links a:hover, nav.tb-links a:active, nav.tb-links a.active{
-      background:#2FD08F; color:#05090B; font-weight:400; text-shadow:none;
+      background:#2FD08F; color:#05090B; font-weight:500; text-shadow:none;
     }
     nav.tb-links a:hover::before, nav.tb-links a:active::before, nav.tb-links a.active::before{ color:#05090B; }
     nav.tb-links a.active::after{ content:"█"; margin-left:auto; font-size:.8em; animation:blink 1s steps(1) infinite; }
@@ -823,7 +823,7 @@
       content:"↑↓ ВЫБОР · TAP = ENTER · ESC = ЗАКРЫТЬ";
       margin-top:auto; flex:none; display:block;
       padding:12px 16px; background:#0E161B; color:#7F9AA6;
-      border-top:1px solid rgba(47,208,143,.35); font-size:19px; letter-spacing:.06em;
+      border-top:1px solid rgba(47,208,143,.35); font-family:var(--mono); font-size:12px; letter-spacing:.04em;
     }
     body.lang-en nav.tb-links::after{ content:"↑↓ SELECT · TAP = ENTER · ESC = CLOSE"; }
 
@@ -904,7 +904,7 @@
   </h1>
   <p class="hero-sub">
     <span class="ru">Разрабатываю сайты, магазины и интерфейсы. Объясняю сложные системы через схемы и техническую инфографику. Дизайн-образование плюс 15 лет практики в коде.</span>
-    <span class="en">I build websites, stores and interfaces — and explain complex systems through diagrams and technical infographics. Communication design background, eight years of hands-on coding.</span>
+    <span class="en">I build websites, stores and interfaces — and explain complex systems through diagrams and technical infographics. Communication design background, fifteen years of hands-on coding.</span>
   </p>
 
   <div class="spec-table">
