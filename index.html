@@ -1400,17 +1400,8 @@
   (() => {
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // CRT-переключатель (запоминается)
-    const crtBtn = document.getElementById('crtBtn');
-    let crtSaved = null; try { crtSaved = localStorage.getItem('vp-crt'); } catch(e){}
-    const crtOn = crtSaved ? crtSaved === 'on' : !reduce;
-    document.body.classList.toggle('crt', crtOn);
-    crtBtn.setAttribute('aria-pressed', crtOn);
-    crtBtn.addEventListener('click', () => {
-      const on = document.body.classList.toggle('crt');
-      crtBtn.setAttribute('aria-pressed', on);
-      try { localStorage.setItem('vp-crt', on ? 'on' : 'off'); } catch(e){}
-    });
+    // CRT-эффект выключен (кнопка убрана из шапки)
+    document.body.classList.remove('crt');
 
     // часы + процент прокрутки в шапке
     const clock = document.getElementById('sysClock');
