@@ -500,25 +500,6 @@
   .hero h1::after{ content:"_"; color:var(--signal); animation:blink 1s steps(1) infinite; }
   @keyframes blink{ 50%{ opacity:0; } }
 
-  /* ---------- hero image ---------- */
-  .hero-art{
-    position:absolute; top:0; bottom:0; right:0;
-    width:min(45%, 640px);
-    z-index:-1;               /* под текстом (у .hero уже isolation:isolate) */
-    pointer-events:none;
-    display:flex; align-items:stretch; justify-content:flex-end;
-  }
-  .hero-art img{
-    height:100%; width:100%;
-    object-fit:contain;       /* без искажения пропорций */
-    object-position:right center;
-    opacity:.2;
-    display:block;
-  }
-  @media (max-width:760px){
-    .hero-art{ width:70%; }
-  }
-
   /* hero: вращающийся каркасный куб (векторная графика 80-х) */
   .wire{
     --s:clamp(110px,13vw,170px);
@@ -899,10 +880,6 @@
 <div class="spine"></div>
 
 <section class="hero section">
-  <div class="hero-art" aria-hidden="true">
-    <img src="img/img-pvv-l.png" alt="">
-  </div>
-
   <!--div class="wire" aria-hidden="true" style="--s0:clamp(110px,13vw,170px)">
     <div class="wire-cube"><i></i><i></i><i></i><i></i><i></i><i></i></div>
     <div class="wire-cube in"><i></i><i></i><i></i><i></i><i></i><i></i></div>
