@@ -719,6 +719,7 @@
   .contact-panel{ position:relative; overflow:hidden; isolation:isolate; }
   .contact-panel > *{ position:relative; z-index:1; }
   .contact-panel::after{
+    display: none;
     content:""; position:absolute; z-index:0; pointer-events:none;
     left:-25%; right:-25%; bottom:-1px; height:70%;
     background:
