@@ -724,6 +724,9 @@
   @keyframes floor{ to{ background-position:0 40px, 0 0; } }
 
   /* CRT: scanlines + виньетка + полоса развёртки */
+  #crtBtn {
+  display: none;
+}
   .crt-btn[aria-pressed="true"]{ background:var(--signal); border-color:var(--signal); color:#fff; }
   body.crt::before{
     content:""; position:fixed; inset:0; z-index:300; pointer-events:none;
