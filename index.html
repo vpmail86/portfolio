@@ -14,8 +14,8 @@
    2. База (reset, типографика, язык)
    3. Шапка и навигация
    4. Каркас страницы (wrap, spine, section, hero)
-   5. Компоненты (terminal, pinout, case, slider, lightbox, process,
-      stack, contact, footer, to-top)
+   5. Компоненты (terminal, pinout, button, case, slider, lightbox,
+      process, stack, contact, modal, footer, to-top)
    6. Ретро-окна (заголовки в стиле старых ОС)
    7. Тёмная тема
    8. Анимации (keyframes + reveal)
@@ -126,10 +126,11 @@ body.lang-en .en-flex{ display:flex; }
 .tb-left{ display:flex; align-items:center; gap:14px; }
 .tb-mark{
   width:36px; height:36px; flex-shrink:0;
-  border:.0; border-radius:50%;overflow: hidden;
+  border:.0; border-radius:50%; overflow:hidden;
   display:flex; align-items:center; justify-content:center;
   font-family:var(--cond); font-weight:700; font-size:11px;
 }
+.tb-mark img{ width:100%; }
 .tb-doc{ font-family:var(--mono); font-size:10px; color:var(--muted); line-height:1.3; }
 .tb-right{ display:flex; align-items:center; gap:12px; }
 
@@ -147,10 +148,6 @@ nav.tb-links a.active{ color:var(--ink); font-weight:500; }
 .burger.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
 .burger.open span:nth-child(2){ opacity:0; }
 .burger.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
-
-.tb-mark img {
-  width: 100%;
-}
 
 
 /* =====================================================================
@@ -212,7 +209,7 @@ nav.tb-links a.active{ color:var(--ink); font-weight:500; }
 .spec-table .cell .k{ display:block; margin-bottom:9px; font-family:var(--mono); font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.07em; }
 .spec-table .cell .v{ font-size:16px; font-weight:500; line-height:1.35; }
 .count{ font-weight:inherit; font-variant-numeric:tabular-nums; color:var(--signal); }
-.v b {color:var(--signal);font-weight: inherit;}
+.v b{ color:var(--signal); font-weight:inherit; }
 
 
 /* =====================================================================
@@ -278,6 +275,19 @@ nav.tb-links a.active{ color:var(--ink); font-weight:500; }
 .pin-name a{ color:var(--ink); text-decoration:none; border-bottom:1.5px solid var(--signal); padding-bottom:1px; }
 .pin-name a:hover{ color:var(--signal); }
 .pin-desc{ padding:20px 18px; font-size:14.5px; color:var(--muted); line-height:1.55; }
+
+/* ---------- кнопка «Написать мне» ---------- */
+.cta-row{ display:flex; margin-top:34px; }
+.btn{
+  display:inline-flex; align-items:center; gap:12px; padding:14px 24px;
+  font-family:var(--cond); font-size:16px; font-weight:500; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--paper); background:var(--ink);
+  border:1.5px solid var(--ink); border-radius:var(--radius);
+  box-shadow:4px 4px 0 var(--signal); cursor:pointer;
+  transition:transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease;
+}
+.btn:hover{ background:var(--signal); border-color:var(--signal); transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink); }
+.btn:active{ transform:translate(3px,3px); box-shadow:0 0 0 var(--signal); }
 
 /* ---------- case ---------- */
 .case{
@@ -421,6 +431,40 @@ footer.contact{ padding:80px var(--gap) 0; border-top:1px solid var(--line); }
 }
 .titleblock-footer .fcell{ display:flex; align-items:center; gap:10px; }
 
+/* ---------- модальное окно (контакты) ---------- */
+.modal{
+  position:fixed; inset:0; z-index:250; display:none; align-items:center; justify-content:center;
+  padding:20px; background:rgba(5,9,11,.8);
+}
+.modal.open{ display:flex; }
+.modal-window{
+  width:min(640px,100%); max-height:calc(100vh - 40px); max-height:calc(100dvh - 40px); overflow-y:auto;
+  background:var(--card); border:1.5px solid var(--ink); border-radius:var(--radius);
+  box-shadow:6px 6px 0 var(--signal);
+}
+.modal.open .modal-window{ animation:rise .25s ease backwards; }
+.modal-bar{
+  position:sticky; top:0; z-index:2;
+  display:flex; align-items:center; justify-content:space-between; height:30px; padding-left:12px;
+  background:var(--ink); color:var(--paper);
+  font-family:var(--cond); font-weight:500; font-size:14px; letter-spacing:.08em;
+}
+.modal-close{
+  width:44px; height:30px; padding:0; border:none; background:transparent; color:inherit; cursor:pointer;
+  font-family:var(--mono); font-size:20px; line-height:30px;
+}
+.modal-close:hover{ background:var(--paper); color:var(--ink); }
+.modal-body{
+  padding:34px 30px 38px;
+  background:
+    linear-gradient(var(--line) 1px, transparent 1px) 0 0/28px 28px,
+    linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0/28px 28px,
+    var(--card);
+}
+.modal-body .case-kicker{ margin-bottom:18px; color:var(--signal); }
+.modal-body h2{ font-size:clamp(24px,4.4vw,38px); line-height:1.15; margin-bottom:30px; }
+.modal-body .contact-links{ gap:22px 32px; }
+
 /* ---------- to-top ---------- */
 .to-top{
   position:fixed; right:16px; bottom:16px; z-index:70;
@@ -478,6 +522,8 @@ body.dark .zoom-hint{ background:rgba(17,26,32,.9); }
 body.dark .hero h1{ text-shadow:3px 3px 0 rgba(47,208,143,.3); }
 body.dark :is(.pinout,.case,.process,.term)::before{ background:var(--signal); color:#0C1217; border-bottom-color:var(--signal); }
 body.dark :is(.pinout,.case,.process,.term)::after{ color:#0C1217; }
+body.dark .modal-bar{ background:var(--signal); color:#0C1217; }
+body.dark .modal-close:hover{ background:#0C1217; color:var(--signal); }
 
 
 /* =====================================================================
@@ -553,6 +599,10 @@ body.dark :is(.pinout,.case,.process,.term)::after{ color:#0C1217; }
   .pin-name{ font-size:23px; padding:26px 24px; }
   .pin-desc{ font-size:20px; padding:26px 24px; }
 
+  .cta-row{ margin-top:44px; }
+  .btn{ font-size:21px; padding:18px 32px; box-shadow:5px 5px 0 var(--signal); }
+  .btn:hover{ box-shadow:8px 8px 0 var(--ink); }
+
   .case-visual, .slider-track, .slide{ min-height:420px; }
   .slide{ padding:44px; }
   .slide img{ max-height:560px; }
@@ -581,6 +631,14 @@ body.dark :is(.pinout,.case,.process,.term)::after{ color:#0C1217; }
   .contact-links a{ font-size:23px; }
   .titleblock-footer{ font-size:15px; padding:34px var(--gap) 52px; margin-top:78px; }
 
+  .modal-window{ width:min(860px,100%); }
+  .modal-bar{ height:38px; font-size:18px; padding-left:16px; }
+  .modal-close{ height:38px; width:56px; font-size:26px; line-height:38px; }
+  .modal-body{ padding:46px 44px 52px; }
+  .modal-body .case-kicker{ font-size:14px; }
+  .modal-body h2{ font-size:50px; }
+  .modal-body .contact-links a{ font-size:23px; }
+
   .to-top{ width:54px; height:54px; right:28px; bottom:28px; }
   .to-top svg{ width:22px; height:22px; }
 }
@@ -601,6 +659,7 @@ body.dark :is(.pinout,.case,.process,.term)::after{ color:#0C1217; }
 @media (max-width:760px){
   .spec-table{ grid-template-columns:1fr 1fr; }
   :is(.pinout,.case,.process,.term,.spec-table,.contact-panel){ box-shadow:4px 4px 0 var(--sh); }
+  .modal-window{ box-shadow:4px 4px 0 var(--signal); }
   .burger{ display:flex; }
 
   /* backdrop-filter делает шапку контейнером для fixed-потомков —
@@ -682,6 +741,12 @@ body.dark :is(.pinout,.case,.process,.term)::after{ color:#0C1217; }
   .process{ grid-template-columns:1fr; }
   .process .step{ border-left:none !important; border-top:1px solid var(--line); }
   .process .step:first-child{ border-top:none; }
+
+  .cta-row{ margin-top:28px; }
+  .btn{ width:100%; justify-content:center; }
+  .modal{ padding:12px; }
+  .modal-body{ padding:26px 20px 30px; }
+  .modal-body .contact-links{ flex-direction:column; gap:18px; align-items:flex-start; }
 }
 
 /* ---------- 9.9  уменьшенная анимация ---------- */
@@ -691,6 +756,8 @@ body.dark :is(.pinout,.case,.process,.term)::after{ color:#0C1217; }
   .rv{ opacity:1; }
   .rv.in{ animation:none; }
   .ticker-track, .sheet-marker .via, .hero h1::after{ animation:none; }
+  .modal.open .modal-window{ animation:none; }
+  .btn{ transition:none; }
 
   .term .out, .term .l2, .term .l3, .term .l4{ opacity:1; }
   .term .cmd{ width:var(--w); }
@@ -822,7 +889,7 @@ body.dark :is(.pinout,.case,.process,.term)::after{ color:#0C1217; }
   <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.01</span></div>
   <div class="section-intro">
     <h2><span class="ru">Что я делаю</span><span class="en">What I do</span></h2>
-    <p class="note"><span class="ru">Пять основных направлений, с которыми я работаю.</span><span class="en">The five main areas I work with.</span></p>
+    <p class="note"><span class="ru">Пять направлений, которые обычно идут в связке — сайт редко существует отдельно от того, как он объясняет продукт.</span><span class="en">Five areas that usually come as a set — a website rarely exists apart from how well it explains the product.</span></p>
   </div>
 
   <div class="pinout">
@@ -851,6 +918,12 @@ body.dark :is(.pinout,.case,.process,.term)::after{ color:#0C1217; }
       <div class="pin-name"><span class="ru">Документация и инструкции</span><span class="en">Documentation &amp; guides</span></div>
       <div class="pin-desc"><span class="ru">Онбординг, мануалы, пошаговые инструкции — понятные не только инженерам.</span><span class="en">Onboarding flows, manuals, step-by-step guides — clear to more than just engineers.</span></div>
     </div>
+  </div>
+
+  <div class="cta-row">
+    <button type="button" class="btn" data-open-contact>
+      <span class="ru">Написать мне</span><span class="en">Message me</span> <span aria-hidden="true">→</span>
+    </button>
   </div>
 </section>
 
@@ -950,6 +1023,12 @@ body.dark :is(.pinout,.case,.process,.term)::after{ color:#0C1217; }
       <div class="pin-desc"><span class="ru">Строительные материалы</span><span class="en">Construction materials</span></div>
     </div>
   </div>
+
+  <div class="cta-row">
+    <button type="button" class="btn" data-open-contact>
+      <span class="ru">Написать мне</span><span class="en">Message me</span> <span aria-hidden="true">→</span>
+    </button>
+  </div>
 </section>
 
 <section class="section" id="process">
@@ -1031,6 +1110,26 @@ body.dark :is(.pinout,.case,.process,.term)::after{ color:#0C1217; }
     <path d="M12 6V19" stroke-width="2" stroke-linecap="round"/>
   </svg>
 </button>
+
+<!-- модальное окно: контакты -->
+<div class="modal" id="contactModal" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
+  <div class="modal-window">
+    <div class="modal-bar">
+      <span>■ CONTACT.EXE</span>
+      <button type="button" class="modal-close" id="contactModalClose" aria-label="Закрыть / Close">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="case-kicker"><span class="ru">СВЯЗАТЬСЯ</span><span class="en">GET IN TOUCH</span></div>
+      <h2 id="contactModalTitle"><span class="ru">Обсудим ваш проект — сайт или графику</span><span class="en">Let's talk about your project — website or graphics</span></h2>
+      <div class="contact-links">
+        <a href="mailto:vpmail86@gmail.com" target="_blank" rel="noopener">vpmail86@gmail.com</a>
+        <a href="https://t.me/pilipeople" target="_blank" rel="noopener">Telegram</a>
+        <a href="https://www.linkedin.com/in/vadim-pilipenko-88729161/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.behance.net/vadimpilipenko" target="_blank" rel="noopener">Behance</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" id="lightboxClose" aria-label="Close">
@@ -1119,6 +1218,28 @@ body.dark :is(.pinout,.case,.process,.term)::after{ color:#0C1217; }
   }, { passive:true });
   toTop.addEventListener('click', ()=>{
     window.scrollTo({ top:0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  });
+
+  // модальное окно «Написать мне»
+  const contactModal = document.getElementById('contactModal');
+  const contactModalClose = document.getElementById('contactModalClose');
+  let modalLastFocus = null;
+  function openContactModal(){
+    modalLastFocus = document.activeElement;
+    contactModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    contactModalClose.focus();
+  }
+  function closeContactModal(){
+    contactModal.classList.remove('open');
+    document.body.style.overflow = '';
+    if(modalLastFocus && modalLastFocus.focus) modalLastFocus.focus();
+  }
+  document.querySelectorAll('[data-open-contact]').forEach(b => b.addEventListener('click', openContactModal));
+  contactModalClose.addEventListener('click', closeContactModal);
+  contactModal.addEventListener('click', e => { if(e.target === contactModal) closeContactModal(); });
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape' && contactModal.classList.contains('open')) closeContactModal();
   });
 
   // case-study image slider
