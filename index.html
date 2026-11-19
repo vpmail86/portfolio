@@ -819,6 +819,8 @@ body.dark .modal-close:hover{ background:#0C1217; color:var(--signal); }
 </style>
 </head>
 <body>
+<script>/* тема применяется до отрисовки, чтобы не мигала: по умолчанию тёмная */
+try{ if(localStorage.getItem('vp-theme') !== 'light') document.body.classList.add('dark'); }catch(e){ document.body.classList.add('dark'); }</script>
 
 <div class="boot" id="boot" aria-hidden="true">
   <pre class="boot-text" id="bootText"></pre>
@@ -1437,10 +1439,10 @@ body.dark .modal-close:hover{ background:#0C1217; color:var(--signal); }
   (() => {
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // theme toggle (saved, falls back to system preference)
+    // theme toggle: тёмная по умолчанию, выбор пользователя сохраняется в localStorage
     const body = document.body, btn = document.getElementById('themeBtn');
     let saved = null; try { saved = localStorage.getItem('vp-theme'); } catch(e){}
-    const dark = saved ? saved === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    const dark = saved !== 'light'; // по умолчанию тёмная; светлая — только если выбрана вручную
     body.classList.toggle('dark', dark);
     btn.setAttribute('aria-pressed', dark);
     btn.addEventListener('click', () => {
