@@ -3,10 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>try{ if(localStorage.getItem('vp-theme') === 'light') document.documentElement.classList.add('light'); }catch(e){}</script>
 <title>Vadim Pilipenko — Web &amp; Technical Design</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Tektur:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Tektur:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Tektur:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
 <style>
 /* =====================================================================
    СОДЕРЖАНИЕ
@@ -17,7 +19,7 @@
    5. Компоненты (terminal, pinout, button, case, slider, lightbox,
       process, stack, contact, modal, footer, to-top)
    6. Ретро-окна (заголовки в стиле старых ОС)
-   7. Тёмная тема
+   7. Светлая тема (переопределения; тёмная — по умолчанию, в :root)
    8. Анимации (keyframes + reveal)
    9. MEDIA QUERIES — по возрастанию/убыванию ширины:
       9.1  min-width 900px   (ноутбуки+)
@@ -36,18 +38,18 @@
    1. ПЕРЕМЕННЫЕ
    ===================================================================== */
 :root{
-  --paper:#EAEFF0;
-  --paper2:#E1E7E8;
-  --ink:#10181F;
-  --muted:#57666D;
-  --line:#C3CFD2;
-  --line-strong:#9FAFB3;
-  --signal:#128A5C;
-  --signal-soft:#DCF0E6;
+  --paper:#0C1217;
+  --paper2:#121B22;
+  --ink:#E4ECEE;
+  --muted:#8A9BA3;
+  --line:#22313A;
+  --line-strong:#3A4D58;
+  --signal:#2FD08F;
+  --signal-soft:#12302A;
   --warn:#C97A1F;
-  --card:#F5F7F6;
-  --cv-bg:#EFF3F3;
-  --cv-grid:rgba(16,24,31,.05);
+  --card:#111A20;
+  --cv-bg:#0E161B;
+  --cv-grid:rgba(255,255,255,.05);
   --mono:'IBM Plex Mono', ui-monospace, 'Courier New', monospace;
   --sans:var(--mono);
   --cond:'Tektur', 'IBM Plex Mono', sans-serif;
@@ -55,7 +57,7 @@
   --radius:2px;
   --slide-speed:1000ms;
   --lightbox-slide-speed:300ms;
-  --cursor-zoom:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Ccircle cx='13' cy='13' r='8' fill='%23fff' fill-opacity='.85' stroke='%2310181F' stroke-width='2.5'/%3E%3Cpath d='M19 19l8 8' stroke='%2310181F' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M13 9v8M9 13h8' stroke='%23128A5C' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") 13 13, zoom-in;
+  --cursor-zoom:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Ccircle cx='13' cy='13' r='8' fill='%230C1217' fill-opacity='.85' stroke='%23E4ECEE' stroke-width='2.5'/%3E%3Cpath d='M19 19l8 8' stroke='%23E4ECEE' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M13 9v8M9 13h8' stroke='%232FD08F' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") 13 13, zoom-in;
 }
 
 
@@ -63,9 +65,10 @@
    2. БАЗА
    ===================================================================== */
 *{ box-sizing:border-box; }
-html{ scroll-behavior:smooth; }
+html{ scroll-behavior:smooth; color-scheme:dark; }
+html.light{ color-scheme:light; }
 body{
-  --sh:var(--ink);
+  --sh:var(--line-strong);
   margin:0;
   background:
     linear-gradient(var(--paper2) 1px, transparent 1px) 0 0/100% 32px,
@@ -77,8 +80,8 @@ body{
   font-family:var(--sans);
   font-size:16px;
   -webkit-font-smoothing:antialiased;
-  transition:background-color .3s, color .3s;
 }
+body.theme-ready{ transition:background-color .3s, color .3s; }
 ::selection{ background:var(--signal); color:#fff; }
 a{ color:inherit; }
 h1,h2,h3{ margin:0; font-family:var(--cond); font-weight:500; letter-spacing:.02em; text-transform:uppercase; }
@@ -113,9 +116,9 @@ body.lang-en .en-flex{ display:flex; }
 .theme-btn:hover{ background:var(--signal); border-color:var(--signal); color:#fff; }
 /* иконки темы: солнце — светлая, луна — тёмная */
 .theme-btn svg{ width:18px; height:18px; display:block; }
-.theme-btn .ico-moon{ display:none; }
-body.dark .theme-btn .ico-sun{ display:none; }
-body.dark .theme-btn .ico-moon{ display:block; }
+.theme-btn .ico-sun{ display:none; }
+html.light .theme-btn .ico-sun{ display:block; }
+html.light .theme-btn .ico-moon{ display:none; }
 #crtBtn{ display:none; }
 
 
@@ -126,7 +129,7 @@ body.dark .theme-btn .ico-moon{ display:block; }
   position:sticky; top:0; z-index:50;
   display:flex; align-items:center; justify-content:space-between;
   padding:8px var(--gap);
-  background:rgba(234,239,240,.88);
+  background:rgba(12,18,23,.88);
   backdrop-filter:blur(6px);
   border-bottom:1.5px solid var(--ink);
 }
@@ -204,8 +207,8 @@ nav.tb-links a.active{ color:var(--ink); font-weight:500; }
 }
 .hero-doc .dot{ width:6px; height:6px; flex-shrink:0; border-radius:50%; background:var(--signal); }
 .hero h1{
-  font-size:clamp(42px,5.8vw,110px); line-height:1.08; margin-bottom:20px;
-  text-shadow:3px 3px 0 rgba(18,138,92,.28);
+  font-size:clamp(42px,5.8vw,105px); line-height:1.08; margin-bottom:20px;
+  text-shadow:3px 3px 0 rgba(47,208,143,.3);
 }
 .hero h1::after{ content:"_"; color:var(--signal); animation:blink 1s steps(1) infinite; }
 .hero h1 d{
@@ -374,7 +377,7 @@ nav.tb-links a.active{ color:var(--ink); font-weight:500; }
   position:absolute; top:14px; right:14px; z-index:5; pointer-events:none;
   display:flex; align-items:center; gap:6px; padding:5px 12px 5px 10px;
   font-family:var(--mono); font-size:11.5px; color:var(--muted);
-  background:rgba(245,247,246,.9); border:1px solid var(--line-strong); border-radius:100px;
+  background:rgba(17,26,32,.9); border:1px solid var(--line-strong); border-radius:100px;
   opacity:0; transform:translateY(-4px); transition:opacity .18s ease, transform .18s ease;
 }
 .case-visual:hover .zoom-hint{ opacity:1; transform:none; }
@@ -462,14 +465,14 @@ footer.contact{ padding:80px var(--gap) 0; border-top:1px solid var(--line); }
 .modal-bar{
   position:sticky; top:0; z-index:2;
   display:flex; align-items:center; justify-content:space-between; height:30px; padding-left:12px;
-  background:var(--ink); color:var(--paper);
+  background:var(--signal); color:#0C1217;
   font-family:var(--cond); font-weight:500; font-size:14px; letter-spacing:.08em;
 }
 .modal-close{
   width:44px; height:30px; padding:0; border:none; background:transparent; color:inherit; cursor:pointer;
   font-family:var(--mono); font-size:20px; line-height:30px;
 }
-.modal-close:hover{ background:var(--paper); color:var(--ink); }
+.modal-close:hover{ background:#0C1217; color:var(--signal); }
 .modal-body{
   padding:34px 30px 38px;
   /*background:
@@ -519,14 +522,14 @@ footer.contact{ padding:80px var(--gap) 0; border-top:1px solid var(--line); }
 :is(.pinout,.case,.process,.term)::before{
   content:var(--wt,""); display:block; grid-column:1/-1;
   height:30px; line-height:30px; padding:0 110px 0 12px;
-  background:var(--ink); color:var(--paper); border-bottom:1.5px solid var(--ink);
+  background:var(--signal); color:#0C1217; border-bottom:1.5px solid var(--signal);
   font-family:var(--cond); font-weight:500; font-size:14px; letter-spacing:.08em;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 :is(.pinout,.case,.process,.term)::after{
   content:"_  □  ×"; position:absolute; top:0; right:0;
   height:30px; line-height:30px; padding:0 14px;
-  color:var(--paper); font-family:var(--mono); font-size:14px; letter-spacing:.12em;
+  color:#0C1217; font-family:var(--mono); font-size:14px; letter-spacing:.12em;
   white-space:pre; pointer-events:none;
 }
 #services .pinout{ --wt:"■ SERVICES.DIR"; }
@@ -537,24 +540,23 @@ footer.contact{ padding:80px var(--gap) 0; border-top:1px solid var(--line); }
 
 
 /* =====================================================================
-   7. ТЁМНАЯ ТЕМА
+   7. СВЕТЛАЯ ТЕМА (html.light) — тёмная задана по умолчанию в :root
    ===================================================================== */
-body.dark{
-  --paper:#0C1217; --paper2:#121B22; --ink:#E4ECEE; --muted:#8A9BA3;
-  --line:#22313A; --line-strong:#3A4D58; --card:#111A20;
-  --signal:#2FD08F; --signal-soft:#12302A;
-  --cv-bg:#0E161B; --cv-grid:rgba(255,255,255,.05);
-  --sh:var(--line-strong);
-  --cursor-zoom:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Ccircle cx='13' cy='13' r='8' fill='%230C1217' fill-opacity='.85' stroke='%23E4ECEE' stroke-width='2.5'/%3E%3Cpath d='M19 19l8 8' stroke='%23E4ECEE' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M13 9v8M9 13h8' stroke='%232FD08F' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") 13 13, zoom-in;
+html.light{
+  --paper:#EAEFF0; --paper2:#E1E7E8; --ink:#10181F; --muted:#57666D;
+  --line:#C3CFD2; --line-strong:#9FAFB3; --card:#F5F7F6;
+  --signal:#128A5C; --signal-soft:#DCF0E6;
+  --cv-bg:#EFF3F3; --cv-grid:rgba(16,24,31,.05);
+  --cursor-zoom:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Ccircle cx='13' cy='13' r='8' fill='%23fff' fill-opacity='.85' stroke='%2310181F' stroke-width='2.5'/%3E%3Cpath d='M19 19l8 8' stroke='%2310181F' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M13 9v8M9 13h8' stroke='%23128A5C' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") 13 13, zoom-in;
 }
-body.dark header.titleblock{ background:rgba(12,18,23,.88); }
-body.dark .lang-switch button.active{ color:#0C1217; }
-body.dark .zoom-hint{ background:rgba(17,26,32,.9); }
-body.dark .hero h1{ text-shadow:3px 3px 0 rgba(47,208,143,.3); }
-body.dark :is(.pinout,.case,.process,.term)::before{ background:var(--signal); color:#0C1217; border-bottom-color:var(--signal); }
-body.dark :is(.pinout,.case,.process,.term)::after{ color:#0C1217; }
-body.dark .modal-bar{ background:var(--signal); color:#0C1217; }
-body.dark .modal-close:hover{ background:#0C1217; color:var(--signal); }
+html.light body{ --sh:var(--ink); }
+html.light header.titleblock{ background:rgba(234,239,240,.88); }
+html.light .zoom-hint{ background:rgba(245,247,246,.9); }
+html.light .hero h1{ text-shadow:3px 3px 0 rgba(18,138,92,.28); }
+html.light :is(.pinout,.case,.process,.term)::before{ background:var(--ink); color:var(--paper); border-bottom-color:var(--ink); }
+html.light :is(.pinout,.case,.process,.term)::after{ color:var(--paper); }
+html.light .modal-bar{ background:var(--ink); color:var(--paper); }
+html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
 
 
 /* =====================================================================
@@ -819,8 +821,6 @@ body.dark .modal-close:hover{ background:#0C1217; color:var(--signal); }
 </style>
 </head>
 <body>
-<script>/* тема применяется до отрисовки, чтобы не мигала: по умолчанию тёмная */
-try{ if(localStorage.getItem('vp-theme') !== 'light') document.body.classList.add('dark'); }catch(e){ document.body.classList.add('dark'); }</script>
 
 <div class="boot" id="boot" aria-hidden="true">
   <pre class="boot-text" id="bootText"></pre>
@@ -1443,10 +1443,11 @@ try{ if(localStorage.getItem('vp-theme') !== 'light') document.body.classList.ad
     const body = document.body, btn = document.getElementById('themeBtn');
     let saved = null; try { saved = localStorage.getItem('vp-theme'); } catch(e){}
     const dark = saved !== 'light'; // по умолчанию тёмная; светлая — только если выбрана вручную
-    body.classList.toggle('dark', dark);
+    document.documentElement.classList.toggle('light', !dark);
+    requestAnimationFrame(() => requestAnimationFrame(() => body.classList.add('theme-ready')));
     btn.setAttribute('aria-pressed', dark);
     btn.addEventListener('click', () => {
-      const d = body.classList.toggle('dark');
+      const d = !document.documentElement.classList.toggle('light');
       btn.setAttribute('aria-pressed', d);
       try { localStorage.setItem('vp-theme', d ? 'dark' : 'light'); } catch(e){}
     });
