@@ -310,7 +310,7 @@ nav.tb-links a.active{ color:var(--ink); font-weight:500; }
   border:1.5px solid var(--ink); border-radius:var(--radius); overflow:hidden; background:var(--card);
 }
 .case-visual{
-  position:relative; min-height:340px; overflow:hidden; border-right:1.5px solid var(--ink);
+  position:relative; min-height:340px; overflow:hidden; border-right:1.5px solid var(--ink); touch-action:pan-y;
   background:
     repeating-linear-gradient(0deg, var(--cv-grid) 0 1px, transparent 1px 24px),
     repeating-linear-gradient(90deg, var(--cv-grid) 0 1px, transparent 1px 24px),
@@ -379,7 +379,7 @@ nav.tb-links a.active{ color:var(--ink); font-weight:500; }
 .case-visual:hover .zoom-hint{ opacity:1; transform:none; }
 
 /* ---------- lightbox ---------- */
-.lightbox{ position:fixed; inset:0; z-index:200; display:none; align-items:center; justify-content:center; padding:48px; background:rgba(16,24,31,.94); }
+.lightbox{ position:fixed; inset:0; z-index:200; display:none; align-items:center; justify-content:center; padding:48px; background:rgba(16,24,31,.94); touch-action:pan-y pinch-zoom; }
 .lightbox.open{ display:flex; }
 .lightbox-inner{ max-width:92vw; max-height:88vh; display:flex; align-items:center; justify-content:center; transition:opacity var(--lightbox-slide-speed) ease; }
 .lightbox-inner.fading{ opacity:0; }
@@ -1411,6 +1411,24 @@ body.dark .modal-close:hover{ background:#0C1217; color:var(--signal); }
     if(e.key === 'ArrowLeft') lightboxMove(-1);
     if(e.key === 'ArrowRight') lightboxMove(1);
   });
+
+  // свайп влево/вправо (touch): в лайтбоксе и в слайдере кейса
+  function addSwipe(el, onSwipe){
+    let x0 = 0, y0 = 0, active = false;
+    el.addEventListener('touchstart', e => {
+      if(e.touches.length !== 1){ active = false; return; }
+      x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; active = true;
+    }, { passive:true });
+    el.addEventListener('touchend', e => {
+      if(!active) return;
+      active = false;
+      const t = e.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0;
+      if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) onSwipe(dx < 0 ? 1 : -1);
+    }, { passive:true });
+    el.addEventListener('touchcancel', () => { active = false; }, { passive:true });
+  }
+  addSwipe(lightbox, lightboxMove);
+  addSwipe(document.querySelector('.case-visual'), sliderMove);
 
   /* =====================================================
      UPGRADE
