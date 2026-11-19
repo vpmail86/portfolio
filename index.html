@@ -211,7 +211,7 @@ nav.tb-links a.active{ color:var(--ink); font-weight:500; }
   display:block; margin-bottom:.3rem;
   font-family:var(--cond); font-weight:400; font-size:22px; color:var(--muted); text-shadow:none;
 }
-.hero-sub{ font-size:19px; color:var(--muted); max-width:56ch; line-height:1.6; margin-bottom:44px; }
+.hero-sub{ font-size:19px; color:var(--muted); max-width:56ch; line-height:1.6; margin-bottom:28px; }
 
 .spec-table{ display:grid; grid-template-columns:repeat(4,1fr); border:1.5px solid var(--ink); border-radius:var(--radius); overflow:hidden; }
 .spec-table .cell{ padding:16px 18px; border-right:1px solid var(--line); background:var(--card); }
@@ -289,7 +289,7 @@ nav.tb-links a.active{ color:var(--ink); font-weight:500; }
 /* ---------- кнопка «Написать мне» ---------- */
 .cta-row{ display:flex; margin-top:34px; }
 .btn{
-  display:inline-flex; align-items:center; gap:12px; padding:14px 24px;
+  display:inline-flex; align-items:center; gap:12px; padding:14px 24px; text-decoration:none;
   font-family:var(--cond); font-size:16px; font-weight:500; letter-spacing:.06em; text-transform:uppercase;
   color:var(--paper); background:var(--ink);
   border:1.5px solid var(--ink); border-radius:var(--radius);
@@ -298,6 +298,10 @@ nav.tb-links a.active{ color:var(--ink); font-weight:500; }
 }
 .btn:hover{ background:var(--signal); border-color:var(--signal); transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink); }
 .btn:active{ transform:translate(3px,3px); box-shadow:0 0 0 var(--signal); }
+/* вторичная кнопка (контурная) и ряд кнопок в hero */
+.btn--outline{ color:var(--ink); background:var(--card); }
+.btn--outline:hover{ color:var(--paper); }
+.hero-cta{ display:flex; margin:0 0 44px; }
 
 /* ---------- case ---------- */
 .case{
@@ -614,7 +618,8 @@ body.dark .modal-close:hover{ background:#0C1217; color:var(--signal); }
 
   .hero-doc{ font-size:16px; padding:8px 18px 8px 13px; margin-bottom:36px; }
   .hero h1{ margin-bottom:46px; }
-  .hero-sub{ font-size:27px; margin-bottom:58px; }
+  .hero-sub{ font-size:27px; margin-bottom:36px; }
+  .hero-cta{ margin-bottom:58px; }
 
   .spec-table .cell{ padding:28px 30px; }
   .spec-table .cell .k{ font-size:15px; margin-bottom:12px; }
@@ -682,9 +687,10 @@ body.dark .modal-close:hover{ background:#0C1217; color:var(--signal); }
 
 /* ---------- 9.5  до 760px (мобильное меню) ---------- */
 @media (max-width:760px){
-  .spec-table{ grid-template-columns:1fr 1fr; display: none; }
+  .spec-table{ grid-template-columns:1fr 1fr; display:none; }
   :is(.pinout,.case,.process,.term,.spec-table,.contact-panel){ box-shadow:4px 4px 0 var(--sh); }
   .modal-window, .avatar-modal img{ box-shadow:4px 4px 0 var(--signal); }
+  .hero-cta{ margin-bottom:0; }
   .burger{ display:flex; }
 
   /* backdrop-filter делает шапку контейнером для fixed-потомков —
@@ -761,7 +767,8 @@ body.dark .modal-close:hover{ background:#0C1217; color:var(--signal); }
 /* ---------- 9.8  до 560px (телефоны) ---------- */
 @media (max-width:560px){
   .section{ padding:56px 0 56px 22px; }
-   .hero-sub {margin-bottom: 0;}
+  .hero-sub{ margin-bottom:0; }
+  .hero-cta{ margin-top:28px; }
   .hero h1{ font-size:clamp(42px,5.8vw,94px); }
   .hero h1 d{ font-size:16px; }
   .process{ grid-template-columns:1fr; }
@@ -773,7 +780,7 @@ body.dark .modal-close:hover{ background:#0C1217; color:var(--signal); }
   .modal{ padding:12px; }
   .modal-body{ padding:26px 20px 30px; }
   .modal-body .contact-links{ flex-direction:column; gap:18px; align-items:flex-start; }
-   .hero-doc d {display: none;}
+  .hero-doc d{ display:none; }
 }
 
 /* ---------- 9.9  уменьшенная анимация ---------- */
@@ -869,6 +876,12 @@ body.dark .modal-close:hover{ background:#0C1217; color:var(--signal); }
     <span class="ru">Разрабатываю сайты, интерфейсы, техническую инфографику. Профильное дизайн-образование, более 15 лет практики в коде.</span>
     <span class="en">I develop websites, interfaces, technical infographics. Professional design education, more than 15 years of coding experience.</span>
   </p>
+
+  <div class="hero-cta">
+    <a class="btn btn--outline" href="https://www.figma.com/design/TMzZnMqDmbiJOkKIRpJISC/Portfolio-PVV?node-id=8-1096&amp;t=RS1ckEAFDn4nCLok-1" target="_blank" rel="noopener">
+      <span class="ru">Портфолио в Figma</span><span class="en">Figma portfolio</span> <span aria-hidden="true">↗</span>
+    </a>
+  </div>
 
   <div class="spec-table">
     <div class="cell">
