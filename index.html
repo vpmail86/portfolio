@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>try{ if(localStorage.getItem('vp-theme') === 'light') document.documentElement.classList.add('light'); }catch(e){}</script>
 <title>Vadim Pilipenko — Web &amp; Technical Design</title>
+<meta name="description" content="Вадим Пилипенко — веб-разработчик и технический дизайнер. Сайты, интерфейсы, техническая инфографика и документация. Более 15 лет практики." data-ru="Вадим Пилипенко — веб-разработчик и технический дизайнер. Сайты, интерфейсы, техническая инфографика и документация. Более 15 лет практики." data-en="Vadim Pilipenko — web developer and technical designer. Websites, interfaces, technical infographics and documentation. 15+ years of experience.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Tektur:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -621,9 +622,9 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
   .section-intro .note{ font-size:21px; }
 
   .hero-doc{ font-size:16px; padding:8px 18px 8px 13px; margin-bottom:36px; }
-  /*.hero h1{ margin-bottom:46px; }*/
+  .hero h1{ margin-bottom:46px; }
   .hero-sub{ font-size:27px; margin-bottom:36px; }
-  .hero-cta{ margin-bottom:84px; }
+  .hero-cta{ margin-bottom:58px; }
 
   .spec-table .cell{ padding:28px 30px; }
   .spec-table .cell .k{ font-size:15px; margin-bottom:12px; }
@@ -969,7 +970,7 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
   </div>
 
   <div class="cta-row">
-    <button type="button" class="btn btn--outline" data-open-contact>
+    <button type="button" class="btn" data-open-contact>
       <span class="ru">Написать мне</span><span class="en">Message me</span> <svg class="btn-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
     </button>
   </div>
@@ -1073,7 +1074,7 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
   </div>
 
   <div class="cta-row">
-    <button type="button" class="btn btn--outline" data-open-contact>
+    <button type="button" class="btn" data-open-contact>
       <span class="ru">Написать мне</span><span class="en">Message me</span> <svg class="btn-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
     </button>
   </div>
@@ -1207,6 +1208,8 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
     document.getElementById('btnRu').classList.toggle('active', lang === 'ru');
     document.getElementById('btnEn').classList.toggle('active', lang === 'en');
     document.documentElement.lang = lang;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if(metaDesc) metaDesc.content = metaDesc.dataset[lang];
   }
 
   const els = document.querySelectorAll('.reveal');
