@@ -107,8 +107,14 @@ body.lang-en .en-flex{ display:flex; }
 .theme-btn{
   width:36px; height:36px; border:1.5px solid var(--ink); border-radius:50%;
   background:var(--card); color:var(--ink); cursor:pointer; font-size:16px; padding:0; line-height:1;
+  display:flex; align-items:center; justify-content:center;
 }
 .theme-btn:hover{ background:var(--signal); border-color:var(--signal); color:#fff; }
+/* иконки темы: солнце — светлая, луна — тёмная */
+.theme-btn svg{ width:18px; height:18px; display:block; }
+.theme-btn .ico-moon{ display:none; }
+body.dark .theme-btn .ico-sun{ display:none; }
+body.dark .theme-btn .ico-moon{ display:block; }
 #crtBtn{ display:none; }
 
 
@@ -130,6 +136,7 @@ body.lang-en .en-flex{ display:flex; }
   display:flex; align-items:center; justify-content:center;
   font-family:var(--cond); font-weight:700; font-size:11px;
 }
+.tb-mark{ cursor:zoom-in; }
 .tb-mark img{ width:100%; }
 .tb-doc{ font-family:var(--mono); font-size:10px; color:var(--muted); line-height:1.3; }
 .tb-right{ display:flex; align-items:center; gap:12px; }
@@ -465,6 +472,20 @@ footer.contact{ padding:80px var(--gap) 0; border-top:1px solid var(--line); }
 .modal-body h2{ font-size:clamp(24px,4.4vw,38px); line-height:1.15; margin-bottom:30px; }
 .modal-body .contact-links{ gap:22px 32px; }
 
+/* ---------- увеличенное фото из шапки ---------- */
+.avatar-modal{
+  position:fixed; inset:0; z-index:260; display:none; align-items:center; justify-content:center;
+  padding:20px; background:rgba(5,9,11,.88); cursor:zoom-out;
+}
+.avatar-modal.open{ display:flex; }
+.avatar-modal img{
+  display:block; width:auto; height:auto;
+  max-width:min(300px,100%); max-height:calc(100vh - 40px); max-height:calc(100dvh - 40px);
+  border:1.5px solid var(--ink); border-radius:var(--radius);
+  box-shadow:6px 6px 0 var(--signal);
+}
+.avatar-modal.open img{ animation:rise .25s ease backwards; }
+
 /* ---------- to-top ---------- */
 .to-top{
   position:fixed; right:16px; bottom:16px; z-index:70;
@@ -636,7 +657,7 @@ body.dark .modal-close:hover{ background:#0C1217; color:var(--signal); }
   .modal-close{ height:38px; width:56px; font-size:26px; line-height:38px; }
   .modal-body{ padding:56px 54px 62px; }
   .modal-body .case-kicker{ font-size:14px; }
-  .modal-body h2{ font-size:48px; margin-bottom: 40px;}
+  .modal-body h2{ font-size:48px; margin-bottom:40px; }
   .modal-body .contact-links a{ font-size:23px; }
 
   .to-top{ width:54px; height:54px; right:28px; bottom:28px; }
@@ -659,7 +680,7 @@ body.dark .modal-close:hover{ background:#0C1217; color:var(--signal); }
 @media (max-width:760px){
   .spec-table{ grid-template-columns:1fr 1fr; }
   :is(.pinout,.case,.process,.term,.spec-table,.contact-panel){ box-shadow:4px 4px 0 var(--sh); }
-  .modal-window{ box-shadow:4px 4px 0 var(--signal); }
+  .modal-window, .avatar-modal img{ box-shadow:4px 4px 0 var(--signal); }
   .burger{ display:flex; }
 
   /* backdrop-filter делает шапку контейнером для fixed-потомков —
@@ -756,7 +777,7 @@ body.dark .modal-close:hover{ background:#0C1217; color:var(--signal); }
   .rv{ opacity:1; }
   .rv.in{ animation:none; }
   .ticker-track, .sheet-marker .via, .hero h1::after{ animation:none; }
-  .modal.open .modal-window{ animation:none; }
+  .modal.open .modal-window, .avatar-modal.open img{ animation:none; }
   .btn{ transition:none; }
 
   .term .out, .term .l2, .term .l3, .term .l4{ opacity:1; }
@@ -791,7 +812,7 @@ body.dark .modal-close:hover{ background:#0C1217; color:var(--signal); }
 
 <header class="titleblock">
   <div class="tb-left">
-    <div class="tb-mark"><img src="img/iam.jpg" alt="iam_pilipeople "></div>
+    <div class="tb-mark" role="button" tabindex="0" aria-label="Увеличить фото / Enlarge photo"><img src="img/iam.jpg" alt="iam_pilipeople "></div>
     <div class="tb-doc">
       <span class="ru">DOC. VP-PORTFOLIO · REV 2026.08</span>
       <span class="en">DOC. VP-PORTFOLIO · REV 2026.08</span><br>
@@ -808,7 +829,10 @@ body.dark .modal-close:hover{ background:#0C1217; color:var(--signal); }
   </nav>
   <div class="tb-right">
     <button class="theme-btn crt-btn" id="crtBtn" aria-label="CRT effect" aria-pressed="true" title="CRT">▤</button>
-    <button class="theme-btn" id="themeBtn" aria-label="Theme">◐</button>
+    <button class="theme-btn" id="themeBtn" aria-label="Theme" aria-pressed="false">
+      <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
     <div class="lang-switch">
       <button id="btnRu" class="active" onclick="setLang('ru')">RU</button>
       <button id="btnEn" onclick="setLang('en')">EN</button>
@@ -1131,6 +1155,14 @@ body.dark .modal-close:hover{ background:#0C1217; color:var(--signal); }
   </div>
 </div>
 
+<!-- увеличенное фото из шапки -->
+<div class="avatar-modal" id="avatarModal" role="dialog" aria-modal="true" aria-label="Photo">
+  <button class="lightbox-close" id="avatarClose" aria-label="Close">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+  <img id="avatarImg" src="" alt="">
+</div>
+
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" id="lightboxClose" aria-label="Close">
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -1242,6 +1274,34 @@ body.dark .modal-close:hover{ background:#0C1217; color:var(--signal); }
     if(e.key === 'Escape' && contactModal.classList.contains('open')) closeContactModal();
   });
 
+  // увеличение фото из шапки (до натурального размера, но не более 300px — см. CSS)
+  const avatarMark = document.querySelector('.tb-mark');
+  const avatarModal = document.getElementById('avatarModal');
+  const avatarImg = document.getElementById('avatarImg');
+  const avatarClose = document.getElementById('avatarClose');
+  function openAvatar(){
+    const src = avatarMark.querySelector('img');
+    if(!src) return;
+    avatarImg.src = src.currentSrc || src.src;
+    avatarImg.alt = src.alt;
+    avatarModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    avatarClose.focus();
+  }
+  function closeAvatar(){
+    avatarModal.classList.remove('open');
+    document.body.style.overflow = '';
+    avatarMark.focus();
+  }
+  avatarMark.addEventListener('click', openAvatar);
+  avatarMark.addEventListener('keydown', e => {
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openAvatar(); }
+  });
+  avatarModal.addEventListener('click', closeAvatar);
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape' && avatarModal.classList.contains('open')) closeAvatar();
+  });
+
   // case-study image slider
   let sliderIndex = 0;
   const sliderTrack = document.getElementById('sliderTrack');
@@ -1342,8 +1402,10 @@ body.dark .modal-close:hover{ background:#0C1217; color:var(--signal); }
     let saved = null; try { saved = localStorage.getItem('vp-theme'); } catch(e){}
     const dark = saved ? saved === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
     body.classList.toggle('dark', dark);
+    btn.setAttribute('aria-pressed', dark);
     btn.addEventListener('click', () => {
       const d = body.classList.toggle('dark');
+      btn.setAttribute('aria-pressed', d);
       try { localStorage.setItem('vp-theme', d ? 'dark' : 'light'); } catch(e){}
     });
 
