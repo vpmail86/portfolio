@@ -51,7 +51,7 @@
   --card:#111A20;
   --cv-bg:#0E161B;
   --cv-grid:rgba(255,255,255,.05);
-  --grid-hi:rgba(47,208,143,.38); /* подсвеченная сетка под курсором */
+  --grid-hi:rgba(47,208,143,.2); /* подсвеченная сетка под курсором */
   --mono:'IBM Plex Mono', ui-monospace, 'Courier New', monospace;
   --sans:var(--mono);
   --cond:'Tektur', 'IBM Plex Mono', sans-serif;
@@ -89,12 +89,14 @@ body.theme-ready{ transition:background-color .3s, color .3s; }
 .bg-glow{
   --mx:-999px; --my:-999px;
   position:fixed; inset:0; z-index:-1; pointer-events:none;
+  opacity:0; transition:opacity .6s ease; /* плавно появляется/гаснет */
   background:
     linear-gradient(var(--grid-hi) 1px, transparent 1px) 0 var(--oy,0px)/100% 32px,
     linear-gradient(90deg, var(--grid-hi) 1px, transparent 1px) 0 0/32px 100%;
-  -webkit-mask-image:radial-gradient(circle 260px at var(--mx) var(--my), #000 0%, rgba(0,0,0,.55) 45%, transparent 100%);
-          mask-image:radial-gradient(circle 260px at var(--mx) var(--my), #000 0%, rgba(0,0,0,.55) 45%, transparent 100%);
+  -webkit-mask-image:radial-gradient(circle 260px at var(--mx) var(--my), rgba(0,0,0,.85) 0%, rgba(0,0,0,.45) 45%, transparent 100%);
+          mask-image:radial-gradient(circle 260px at var(--mx) var(--my), rgba(0,0,0,.85) 0%, rgba(0,0,0,.45) 45%, transparent 100%);
 }
+.bg-glow.on{ opacity:1; }
 @media (hover:none){ .bg-glow{ display:none; } }
 ::selection{ background:var(--signal); color:#fff; }
 a{ color:inherit; }
@@ -537,17 +539,23 @@ footer.contact{ padding:80px var(--gap) 0; border-top:1px solid var(--line); }
 
 :is(.pinout,.case,.process,.term)::before{
   content:var(--wt,""); display:block; grid-column:1/-1;
-  height:40px; line-height:40px; padding:0 110px 0 12px;
+  height:40px; line-height:40px; padding:0 140px 0 12px;
   background:var(--signal); color:#0C1217; border-bottom:1.5px solid var(--signal);
   font-family:var(--cond); font-weight:500; font-size:14px; letter-spacing:.08em;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
-:is(.pinout,.case,.process,.term)::after{
-  content:"_  □  ×"; position:absolute; top:0; right:0;
-  height:40px; line-height:40px; padding:0 14px;
-  color:#0C1217; font-family:var(--mono); font-size:14px; letter-spacing:.12em;
-  white-space:pre; pointer-events:none;
+/* кнопки окна: «_» и «×» сворачивают, «□» разворачивает (добавляются скриптом в конец окна) */
+.win-ctrl{ position:absolute; top:0; right:0; z-index:3; display:flex; height:40px; }
+.win-btn{
+  width:44px; height:40px; padding:0; border:none; background:transparent; color:#0C1217; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:background .15s ease, color .15s ease, opacity .15s ease;
 }
+.win-btn svg{ width:16px; height:16px; display:block; }
+.win-btn:hover{ background:#0C1217; color:var(--signal); }
+.win-btn:focus-visible{ outline:2px solid #0C1217; outline-offset:-4px; }
+.win-btn[aria-disabled="true"]{ opacity:.35; pointer-events:none; }
+.is-folded > :not(.win-ctrl){ visibility:hidden; } /* свёрнутое содержимое не фокусируется и не кликается */
 #services .pinout{ --wt:"■ SERVICES.DIR"; }
 #projects .pinout{ --wt:"■ PROJECTS.DIR"; }
 .case{ --wt:"■ ATIOS_CASE.EXE"; }
@@ -563,7 +571,7 @@ html.light{
   --line:#C3CFD2; --line-strong:#9FAFB3; --card:#F5F7F6;
   --signal:#128A5C; --signal-soft:#DCF0E6;
   --cv-bg:#EFF3F3; --cv-grid:rgba(16,24,31,.05);
-  --grid-hi:rgba(18,138,92,.42);
+  --grid-hi:rgba(18,138,92,.24);
   --cursor-zoom:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Ccircle cx='13' cy='13' r='8' fill='%23fff' fill-opacity='.85' stroke='%2310181F' stroke-width='2.5'/%3E%3Cpath d='M19 19l8 8' stroke='%2310181F' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M13 9v8M9 13h8' stroke='%23128A5C' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") 13 13, zoom-in;
 }
 html.light body{ --sh:var(--ink); }
@@ -571,7 +579,8 @@ html.light header.titleblock{ background:rgba(234,239,240,.88); }
 html.light .zoom-hint{ background:rgba(245,247,246,.9); }
 html.light .hero h1{ text-shadow:3px 3px 0 rgba(18,138,92,.28); }
 html.light :is(.pinout,.case,.process,.term)::before{ background:var(--ink); color:var(--paper); border-bottom-color:var(--ink); }
-html.light :is(.pinout,.case,.process,.term)::after{ color:var(--paper); }
+html.light .win-btn{ color:var(--paper); }
+html.light .win-btn:hover{ background:var(--paper); color:var(--ink); }
 html.light .modal-bar{ background:var(--ink); color:var(--paper); }
 html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
 
@@ -1533,14 +1542,83 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
     });
   })();
 
-  // подсветка сетки под курсором (только на устройствах с мышью)
+  // подсветка сетки под курсором: круг догоняет курсор с лёгкой затяжкой (только для устройств с мышью)
   (() => {
     const glow = document.getElementById('bgGlow');
     if (!glow || !matchMedia('(hover:hover)').matches) return;
-    let x = -999, y = -999, raf = 0;
-    const apply = () => { glow.style.setProperty('--mx', x + 'px'); glow.style.setProperty('--my', y + 'px'); raf = 0; };
-    addEventListener('pointermove', e => { x = e.clientX; y = e.clientY; if (!raf) raf = requestAnimationFrame(apply); }, { passive:true });
-    document.documentElement.addEventListener('mouseleave', () => { x = -999; y = -999; if (!raf) raf = requestAnimationFrame(apply); });
+    const k = matchMedia('(prefers-reduced-motion: reduce)').matches ? 1 : 0.14; // 1 = без затяжки
+    let tx = -999, ty = -999, cx = -999, cy = -999, raf = 0, fresh = true;
+    const step = () => {
+      cx += (tx - cx) * k; cy += (ty - cy) * k;
+      glow.style.setProperty('--mx', cx + 'px'); glow.style.setProperty('--my', cy + 'px');
+      raf = (Math.abs(tx - cx) > .3 || Math.abs(ty - cy) > .3) ? requestAnimationFrame(step) : 0;
+    };
+    addEventListener('pointermove', e => {
+      tx = e.clientX; ty = e.clientY;
+      if (fresh) { cx = tx; cy = ty; fresh = false; }   // первый заход — без «пролёта» из угла
+      glow.classList.add('on');
+      if (!raf) raf = requestAnimationFrame(step);
+    }, { passive:true });
+    document.documentElement.addEventListener('mouseleave', () => { glow.classList.remove('on'); fresh = true; });
+  })();
+
+  // окна в стиле старых ОС: «_» и «×» сворачивают окно до заголовка, «□» разворачивает
+  (() => {
+    const svg = d => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" aria-hidden="true">' + d + '</svg>';
+    const ICONS = {
+      min:   svg('<path d="M5 18h14"/>'),
+      max:   svg('<rect x="5" y="5" width="14" height="14"/>'),
+      close: svg('<path d="M6 6l12 12M18 6L6 18"/>')
+    };
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const foldedHeight = win => {
+      const cs = getComputedStyle(win);
+      const bar = parseFloat(getComputedStyle(win, '::before').height) || 40;
+      return bar + parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth);
+    };
+    const sync = win => {
+      const folded = win.classList.contains('is-collapsed');
+      win.querySelectorAll(':scope > .win-ctrl .win-btn').forEach(b => {
+        b.setAttribute('aria-disabled', b.dataset.act === 'collapse' ? folded : !folded);
+      });
+    };
+    const animate = (win, from, to, done) => {
+      if (reduce || !win.animate) { if (done) done(); return; }
+      const a = win.animate([{ height: from + 'px' }, { height: to + 'px' }], { duration: 380, easing: 'cubic-bezier(.2,.8,.2,1)' });
+      a.onfinish = () => { if (done) done(); };
+    };
+    const collapse = win => {
+      if (win.classList.contains('is-collapsed')) return;
+      const from = win.offsetHeight, to = foldedHeight(win);
+      win.classList.add('is-collapsed');
+      win.style.height = to + 'px';
+      sync(win);
+      animate(win, from, to, () => { if (win.classList.contains('is-collapsed')) win.classList.add('is-folded'); });
+    };
+    const expand = win => {
+      if (!win.classList.contains('is-collapsed')) return;
+      const from = win.offsetHeight;
+      win.classList.remove('is-collapsed', 'is-folded');
+      win.style.height = '';
+      const to = win.offsetHeight;
+      sync(win);
+      animate(win, from, to);
+    };
+
+    document.querySelectorAll('.pinout, .case, .process, .term').forEach(win => {
+      const mk = (act, icon, label) => '<button type="button" class="win-btn" data-act="' + act + '" aria-label="' + label + '" title="' + label + '">' + ICONS[icon] + '</button>';
+      const ctrl = document.createElement('div');
+      ctrl.className = 'win-ctrl';
+      ctrl.innerHTML = mk('collapse', 'min', 'Свернуть / Minimize') + mk('expand', 'max', 'Развернуть / Restore') + mk('collapse', 'close', 'Свернуть / Collapse');
+      win.appendChild(ctrl);   // добавляем в конец, чтобы не сбить :first-child / :nth-child у строк и шагов
+      ctrl.addEventListener('click', e => {
+        const b = e.target.closest('.win-btn');
+        if (!b || b.getAttribute('aria-disabled') === 'true') return;
+        (b.dataset.act === 'collapse' ? collapse : expand)(win);
+      });
+      sync(win);
+    });
   })();
 
   /* =====================================================
