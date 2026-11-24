@@ -527,14 +527,14 @@ footer.contact{ padding:80px var(--gap) 0; border-top:1px solid var(--line); }
 
 :is(.pinout,.case,.process,.term)::before{
   content:var(--wt,""); display:block; grid-column:1/-1;
-  height:30px; line-height:30px; padding:0 110px 0 12px;
+  height:40px; line-height:40px; padding:0 110px 0 12px;
   background:var(--signal); color:#0C1217; border-bottom:1.5px solid var(--signal);
   font-family:var(--cond); font-weight:500; font-size:14px; letter-spacing:.08em;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 :is(.pinout,.case,.process,.term)::after{
   content:"_  □  ×"; position:absolute; top:0; right:0;
-  height:30px; line-height:30px; padding:0 14px;
+  height:40px; line-height:40px; padding:0 14px;
   color:#0C1217; font-family:var(--mono); font-size:14px; letter-spacing:.12em;
   white-space:pre; pointer-events:none;
 }
