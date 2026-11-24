@@ -256,12 +256,12 @@ nav.tb-links a.active{ color:var(--ink); font-weight:500; }
 .term.in .o3{ animation:show .01s 3.8s forwards; }
 .term.in .l4{ animation:show .01s 4.3s forwards; }
 
-/* ---------- ticker (скрыт) ---------- */
-.ticker{ display:none !important; overflow:hidden; margin:0 0 0 22px; border-block:1.5px solid var(--ink); background:var(--card); }
-.ticker-track{ display:flex; width:max-content; animation:tick 32s linear infinite; }
+/* ---------- ticker: иконки инструментов (бегущая строка) ---------- */
+.ticker{ overflow:hidden; margin:0 0 0 22px; background:var(--card); }
+.ticker-track{ display:flex; align-items:center; width:max-content; padding:26px 0; animation:tick 58s linear infinite; }
 .ticker:hover .ticker-track{ animation-play-state:paused; }
-.ticker span{ font-family:var(--mono); font-size:13px; font-weight:600; letter-spacing:.1em; padding:13px 26px; color:var(--muted); white-space:nowrap; }
-.ticker span::after{ content:"◆"; color:var(--signal); margin-left:52px; font-size:9px; vertical-align:middle; }
+.ticker-ico{ width:44px; height:44px; flex:none; margin:0 40px; color:var(--muted); transition:color .2s ease; }
+.ticker-ico:hover{ color:var(--signal); }
 
 /* ---------- pinout (услуги / проекты) ---------- */
 .pinout{ border:1.5px solid var(--ink); border-radius:var(--radius); overflow:hidden; }
@@ -624,6 +624,8 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
   .hero-doc{ font-size:16px; padding:8px 18px 8px 13px; margin-bottom:36px; }
   .hero-sub{ font-size:27px; margin-bottom:36px; }
   .hero-cta{ margin-bottom:84px; }
+  .ticker-track{ padding:36px 0; }
+  .ticker-ico{ width:60px; height:60px; margin:0 52px; }
 
   .spec-table .cell{ padding:28px 30px; }
   .spec-table .cell .k{ font-size:15px; margin-bottom:12px; }
@@ -773,6 +775,8 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
   .section{ padding:56px 0 56px 22px; }
   .hero-sub{ margin-bottom:0; }
   .hero-cta{ margin-top:28px; }
+  .ticker-track{ padding:20px 0; }
+  .ticker-ico{ width:36px; height:36px; margin:0 28px; }
   .hero h1{ font-size:clamp(42px,5.8vw,94px); }
   .hero h1 d{ font-size:16px; }
   .process{ grid-template-columns:1fr; }
@@ -908,8 +912,15 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
 </section>
 
 <div class="ticker" aria-hidden="true"><div class="ticker-track">
-  <span>KNX</span><span>DALI</span><span>MATTER</span><span>APPLE HOME</span><span>GOOGLE HOME</span><span>FIGMA</span><span>REACT</span><span>UI/UX</span><span>SCHEMATICS</span>
-  <span>KNX</span><span>DALI</span><span>MATTER</span><span>APPLE HOME</span><span>GOOGLE HOME</span><span>FIGMA</span><span>REACT</span><span>UI/UX</span><span>SCHEMATICS</span>
+  <svg class="ticker-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2h3v6H9a3 3 0 010-6z"/><path d="M12 2h3a3 3 0 010 6h-3z"/><path d="M9 8h3v6H9a3 3 0 010-6z"/><circle cx="15" cy="11" r="3"/><path d="M12 14v3a3 3 0 11-3-3z"/></svg>
+  <svg class="ticker-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7l-5 5 5 5"/><path d="M16 7l5 5-5 5"/><path d="M14 4l-4 16"/></svg>
+  <svg class="ticker-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg>
+  <svg class="ticker-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="2"/><path d="M7 17V8h3a2.5 2.5 0 010 5H7"/><path d="M17 10.5c-1.5-.8-3 0-3 .9 0 1.6 3.2 1 3.2 2.6 0 1-1.6 1.7-3.2.8"/></svg>
+  <svg class="ticker-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l6 9-6 11-6-11z"/><path d="M12 11v11"/><circle cx="12" cy="9" r="1.5" fill="currentColor" stroke="none"/></svg>
+  <svg class="ticker-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 2h14v6.5h-7zM5 8.5h7l7 6.5H5zM5 15h7v7z" fill="currentColor" stroke="none"/></svg>
+  <svg class="ticker-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/></svg>
+  <svg class="ticker-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5l8.2 4.75v9.5L12 21.5l-8.2-4.75v-9.5z"/><path d="M12 8l4 2.3v4.4L12 17l-4-2.3v-4.4z"/></svg>
+  <svg class="ticker-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7.5"/><path d="M14 14l6 6"/></svg>
 </div></div>
 
 <section class="section term-sec" id="terminal">
@@ -1220,6 +1231,14 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
   } else {
     els.forEach(el=>el.classList.add('in'));
   }
+
+  // бегущая строка: размножаем набор иконок для бесшовной прокрутки
+  (() => {
+    const track = document.querySelector('.ticker-track');
+    if(!track) return;
+    const set = Array.from(track.children);
+    for(let i = 0; i < 3; i++) set.forEach(el => track.appendChild(el.cloneNode(true)));
+  })();
 
   // burger menu
   const burger = document.getElementById('burgerBtn');
