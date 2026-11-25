@@ -780,6 +780,7 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
   nav.tb-links.open a:nth-child(4){ animation-delay:.20s; }
   nav.tb-links.open a:nth-child(5){ animation-delay:.25s; }
   nav.tb-links.open a:nth-child(6){ animation-delay:.30s; }
+  nav.tb-links.open a:nth-child(7){ animation-delay:.35s; }
 }
 
 /* ---------- 9.6  до 700px ---------- */
@@ -839,6 +840,113 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
   nav.tb-links.open a.active::after{ animation:none; }
 }
 
+/* =====================================================================
+   НОВЫЕ БЛОКИ: skip-link, манифест, слова, проекты, клиенты,
+   pipeline, lab, личный блок, футер
+   ===================================================================== */
+#lab, #clients, #talk, #manifest{ scroll-margin-top:80px; }
+
+.skip{ position:absolute; left:12px; top:-60px; z-index:600; padding:10px 16px; background:var(--signal); color:#0C1217; font-family:var(--mono); font-size:13px; text-decoration:none; transition:top .2s; }
+.skip:focus{ top:12px; }
+
+/* манифест */
+.manifest h2{ font-size:clamp(34px,6vw,120px); line-height:1.05; }
+.manifest i.l{ display:block; font-style:normal; }
+.manifest .hl{ color:var(--signal); font-weight:inherit; }
+.manifest p{ max-width:60ch; margin:28px 0 0; color:var(--muted); font-size:18px; line-height:1.65; }
+
+/* бегущие слова */
+.words{ overflow:hidden; margin:0 0 0 22px; border-block:1px solid var(--line); }
+.words-track{ display:flex; width:max-content; animation:tick 40s linear infinite; }
+.words-track span{ flex:none; padding:18px 28px; font-family:var(--cond); font-size:clamp(22px,3vw,44px); font-weight:500; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+.words-track span.w1{ color:var(--signal); }
+.words-track span::after{ content:"/"; margin-left:56px; color:var(--line-strong); }
+
+/* фильтры и кнопки-пилюли */
+.filters{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:24px; }
+.filter{ font-family:var(--mono); font-size:12px; letter-spacing:.06em; text-transform:uppercase; padding:8px 16px; border:1.5px solid var(--ink); border-radius:100px; background:var(--card); color:var(--ink); cursor:pointer; transition:background .15s, color .15s; }
+.filter:hover{ background:var(--signal-soft); }
+.filter.on{ background:var(--ink); color:var(--paper); }
+
+/* карточки проектов */
+.proj-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:24px; }
+.proj-card{ display:flex; flex-direction:column; border:1.5px solid var(--ink); border-radius:var(--radius); background:var(--card); box-shadow:6px 6px 0 var(--sh); text-decoration:none; color:inherit; overflow:hidden; transition:transform .2s ease, box-shadow .2s ease; }
+.proj-card:hover{ transform:translate(-3px,-3px); box-shadow:9px 9px 0 var(--signal); }
+.proj-card[hidden]{ display:none; }
+.proj-thumb{ position:relative; aspect-ratio:16/10; overflow:hidden; border-bottom:1.5px solid var(--ink);
+  background:repeating-linear-gradient(0deg,var(--cv-grid) 0 1px,transparent 1px 24px),repeating-linear-gradient(90deg,var(--cv-grid) 0 1px,transparent 1px 24px),var(--cv-bg); }
+.proj-thumb .ph{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding:12px; text-align:center; font-family:var(--cond); font-size:22px; color:var(--muted); letter-spacing:.04em; }
+.proj-thumb img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top; display:block; transition:transform .6s cubic-bezier(.2,.8,.2,1); }
+.proj-card:hover .proj-thumb img{ transform:scale(1.06); }
+.proj-go{ position:absolute; top:10px; right:10px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; border:1.5px solid var(--ink); border-radius:50%; background:var(--paper); font-size:16px; opacity:0; transform:translate(-4px,4px); transition:opacity .2s, transform .2s, background .2s; }
+.proj-card:hover .proj-go{ opacity:1; transform:none; background:var(--signal); color:#0C1217; border-color:var(--signal); }
+.proj-body{ padding:16px 18px 20px; }
+.proj-tag{ display:inline-block; margin-bottom:10px; font-family:var(--mono); font-size:11px; font-weight:600; color:var(--signal); border:1px solid var(--line-strong); border-radius:100px; padding:3px 10px; }
+.proj-body h3{ font-size:19px; margin-bottom:8px; }
+.proj-body p{ margin:0; font-size:14px; color:var(--muted); line-height:1.5; }
+
+/* клиенты */
+.clients-row{ display:flex; flex-wrap:wrap; gap:12px; }
+.client{ font-family:var(--cond); font-size:clamp(18px,2.2vw,28px); padding:14px 22px; border:1.5px solid var(--ink); border-radius:var(--radius); background:var(--card); transition:transform .18s ease, background .18s, color .18s, border-color .18s; }
+.client:hover{ transform:translateY(-3px); background:var(--signal); border-color:var(--signal); color:#0C1217; }
+
+/* pipeline */
+.pipe{ display:grid; grid-template-columns:1.1fr .9fr; gap:28px; align-items:start; }
+.pipe-label{ margin:0 0 12px; font-family:var(--mono); font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.07em; }
+.pipe-left .pipe-label:not(:first-child){ margin-top:26px; }
+.pipe-left .filters{ margin-bottom:0; }
+.node{ cursor:pointer; user-select:none; color:var(--muted); border-style:dashed; border-color:var(--line-strong); }
+.node.on{ color:var(--ink); border-style:solid; border-color:var(--signal); background:var(--signal-soft); box-shadow:4px 4px 0 var(--signal); }
+.node:hover, .node.on:hover{ background:var(--signal-soft); color:var(--ink); }
+.pipe-out{ position:relative; padding-bottom:22px; border:1.5px solid var(--ink); background:#05090B; color:#2FD08F; font-family:var(--mono); font-size:14px; line-height:1.6; box-shadow:6px 6px 0 var(--sh); min-height:280px; }
+.pipe-out::before{ content:"■ OUTPUT.TXT"; display:block; height:40px; line-height:40px; padding:0 12px; background:var(--signal); color:#0C1217; font-family:var(--cond); font-weight:500; font-size:14px; letter-spacing:.08em; }
+.pipe-body{ padding:18px 20px 20px; text-shadow:0 0 6px rgba(47,208,143,.35); }
+.pipe-body p{ margin:0 0 6px; white-space:pre-wrap; }
+.pipe-body .k{ color:#7F9AA6; }
+.pipe-body .res{ color:#BFEFD9; }
+.pipe-out .btn{ margin:0 20px; background:#05090B; color:#2FD08F; border-color:#2FD08F; }
+.pipe-out .btn:hover{ background:#2FD08F; color:#05090B; }
+
+/* lab */
+.lab-grid{ display:grid; grid-template-columns:2fr 1fr; gap:24px; }
+.lab-card{ border:1.5px solid var(--ink); border-radius:var(--radius); background:var(--card); box-shadow:6px 6px 0 var(--sh); overflow:hidden; }
+.lab-bar{ height:40px; line-height:40px; padding:0 12px; background:var(--signal); color:#0C1217; font-family:var(--cond); font-weight:500; font-size:14px; letter-spacing:.08em; }
+.lab-body{ padding:22px; }
+.lab-body .filters{ margin-bottom:0; }
+.ease-view{ display:flex; flex-wrap:wrap; gap:24px; align-items:center; margin:22px 0 14px; }
+.ease-curve{ width:150px; height:200px; flex:none; overflow:visible; }
+.ease-grid{ stroke:var(--line-strong); fill:none; stroke-width:1; stroke-dasharray:3 4; }
+#easePath{ stroke:var(--signal); fill:none; stroke-width:3; stroke-linecap:round; }
+.ease-track{ position:relative; flex:1; min-width:180px; height:44px; border:1px dashed var(--line-strong); border-radius:100px; }
+.ease-dot{ position:absolute; left:6px; top:50%; width:28px; height:28px; margin-top:-14px; border-radius:50%; background:var(--signal); }
+#easeCode{ font-family:var(--mono); font-size:13px; color:var(--muted); }
+.lab-soon{ display:flex; flex-direction:column; justify-content:center; gap:10px; padding:26px; border-style:dashed; box-shadow:none; color:var(--muted); font-size:15px; line-height:1.55; }
+.lab-soon b{ font-family:var(--cond); font-size:20px; color:var(--ink); font-weight:500; }
+
+/* личный блок */
+.talk{ display:grid; grid-template-columns:260px 1fr; gap:40px; align-items:center; }
+.talk-photo{ border:1.5px solid var(--ink); background:var(--card); box-shadow:6px 6px 0 var(--signal); }
+.talk-photo img{ display:block; width:100%; aspect-ratio:1; object-fit:cover; }
+.talk h3{ font-size:clamp(24px,3vw,44px); line-height:1.15; margin-bottom:18px; max-width:22ch; }
+.talk p{ max-width:60ch; margin:0 0 26px; font-size:17px; line-height:1.65; color:var(--muted); }
+
+/* футер */
+.foot-tag{ display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:32px; margin-top:60px; }
+.foot-big{ font-size:clamp(26px,4vw,64px); line-height:1.1; max-width:20ch; }
+.foot-nav{ display:flex; flex-wrap:wrap; gap:24px; }
+.foot-nav a{ font-family:var(--mono); font-size:13px; text-transform:uppercase; letter-spacing:.07em; text-decoration:none; color:var(--muted); }
+.foot-nav a:hover{ color:var(--signal); }
+
+@media (max-width:900px){ .pipe{ grid-template-columns:1fr; } }
+@media (max-width:820px){ .lab-grid{ grid-template-columns:1fr; } }
+@media (max-width:760px){
+  .proj-card, .lab-card, .pipe-out{ box-shadow:4px 4px 0 var(--sh); }
+  .talk-photo{ box-shadow:4px 4px 0 var(--signal); }
+}
+@media (max-width:700px){ .talk{ grid-template-columns:1fr; } .talk-photo{ max-width:240px; } }
+@media (max-width:560px){ .pipe-out .btn{ width:calc(100% - 40px); } .words{ margin-left:22px; } }
+@media (prefers-reduced-motion: reduce){ .words-track{ animation:none; } .proj-card, .proj-thumb img, .client{ transition:none; } }
+
 /* ---------- boot-экран ---------- */
 .boot{
   display:none; position:fixed; inset:0; z-index:500; cursor:pointer;
@@ -854,6 +962,7 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
 </style>
 </head>
 <body>
+<a class="skip" href="#services"><span class="ru">К содержимому</span><span class="en">Skip to content</span></a>
 <div class="bg-glow" id="bgGlow" aria-hidden="true"></div>
 
 <div class="boot" id="boot" aria-hidden="true">
@@ -877,6 +986,7 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
     <a href="#projects"><span class="ru">Проекты</span><span class="en">Projects</span></a>
     <a href="#process"><span class="ru">Процесс</span><span class="en">Process</span></a>
     <a href="#stack"><span class="ru">Инструменты</span><span class="en">Stack</span></a>
+    <a href="#lab"><span class="ru">Lab</span><span class="en">Lab</span></a>
     <a href="#contact"><span class="ru">Контакты</span><span class="en">Contact</span></a>
   </nav>
   <div class="tb-right">
@@ -973,8 +1083,26 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
   </div>
 </section>
 
-<section class="section" id="services">
+<section class="section manifest" id="manifest">
   <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.01</span></div>
+  <h2>
+    <span class="ru"><i class="l">Проектирую,</i><i class="l">рисую и верстаю,</i><i class="l"><b class="hl">объясняю</b> сложное.</i></span>
+    <span class="en"><i class="l">I plan,</i><i class="l">draw and code,</i><i class="l">and <b class="hl">explain</b> the complex.</i></span>
+  </h2>
+  <p>
+    <span class="ru">Более 15 лет в коде и профильное дизайн-образование. Каждый макет приходит с системой, которая его держит, а каждая схема — с логикой, которую можно проверить.</span>
+    <span class="en">More than 15 years in code and a professional design education. Every layout comes with the system that holds it together, every diagram with logic you can verify.</span>
+  </p>
+</section>
+
+<div class="words" aria-hidden="true"><div class="words-track">
+  <span class="w1 ru">Точно.</span><span class="w1 en">Precise.</span>
+  <span class="ru">Понятно.</span><span class="en">Clear.</span>
+  <span class="w1 ru">Работает.</span><span class="w1 en">Reliable.</span>
+</div></div>
+
+<section class="section" id="services">
+  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.02</span></div>
   <div class="section-intro">
     <h2><span class="ru">Что я делаю</span><span class="en">What I do</span></h2>
     <p class="note"><span class="ru">Проектирую, рисую, верстаю, объясняю: пять направлений в одних руках.</span><span class="en">I plan, draw, code and explain: five disciplines in one pair of hands.</span></p>
@@ -1016,7 +1144,7 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
 </section>
 
 <section class="section" id="case">
-  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.02</span></div>
+  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.03</span></div>
   <div class="section-intro">
     <h2><span class="ru">Кейс: Atios</span><span class="en">Case study: Atios</span></h2>
     <p class="note"><span class="ru">Швейцарский производитель устройств для умного дома.</span><span class="en">A Swiss smart-home hardware manufacturer.</span></p>
@@ -1068,48 +1196,49 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
 </section>
 
 <section class="section" id="projects">
-  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.03</span></div>
+  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.04</span></div>
   <div class="section-intro">
     <h2><span class="ru">Реализованные проекты</span><span class="en">Live projects</span></h2>
     <p class="note"><span class="ru">Сайты и магазины, которые работают — разные платформы и задачи.</span><span class="en">Sites and stores in production — different platforms, different tasks.</span></p>
   </div>
 
-  <div class="pinout">
-    <div class="pin-row">
-      <div class="pin-tag">WP</div>
-      <div class="pin-name"><a href="https://evropribor.by/" target="_blank" rel="noopener">evropribor.by ↗</a></div>
-      <div class="pin-desc"><span class="ru">Научно-производственный центр</span><span class="en">Scientific &amp; production center</span></div>
-    </div>
-    <div class="pin-row">
-      <div class="pin-tag">WP</div>
-      <div class="pin-name"><a href="https://uwt.evropribor.by/" target="_blank" rel="noopener">uwt.evropribor.by ↗</a></div>
-      <div class="pin-desc"><span class="ru">Сигнализаторы уровня и уровнемеры</span><span class="en">Level alarms &amp; level meters</span></div>
-    </div>
-    <div class="pin-row">
-      <div class="pin-tag">TILDA</div>
-      <div class="pin-name"><a href="https://nordmax.by/" target="_blank" rel="noopener">nordmax.by ↗</a></div>
-      <div class="pin-desc"><span class="ru">Производство домов и бань из профилированного бруса</span><span class="en">Timber houses &amp; bathhouses manufacturer</span></div>
-    </div>
-    <div class="pin-row">
-      <div class="pin-tag">OC</div>
-      <div class="pin-name"><a href="https://vtraktir.com/" target="_blank" rel="noopener">vtraktir.com ↗</a></div>
-      <div class="pin-desc"><span class="ru">Кафе "Витебский трактир"</span><span class="en">Cafe "Vitebsky Traktir"</span></div>
-    </div>
-    <div class="pin-row">
-      <div class="pin-tag">TILDA</div>
-      <div class="pin-name"><a href="https://golfplus.travel/" target="_blank" rel="noopener">golfplus.travel ↗</a></div>
-      <div class="pin-desc"><span class="ru">Туристическая компания</span><span class="en">Travel agency</span></div>
-    </div>
-    <div class="pin-row">
-      <div class="pin-tag">CUSTOM</div>
-      <div class="pin-name"><a href="https://albico.by/" target="_blank" rel="noopener">albico.by ↗</a></div>
-      <div class="pin-desc"><span class="ru">Кухонные панели</span><span class="en">Kitchen wall panels</span></div>
-    </div>
-    <div class="pin-row">
-      <div class="pin-tag">CUSTOM</div>
-      <div class="pin-name"><a href="https://investgroup.by/" target="_blank" rel="noopener">investgroup.by ↗</a></div>
-      <div class="pin-desc"><span class="ru">Строительные материалы</span><span class="en">Construction materials</span></div>
-    </div>
+  <div class="filters" id="projFilters">
+    <button type="button" class="filter on" data-f="all"><span class="ru">Все</span><span class="en">All</span></button>
+    <button type="button" class="filter" data-f="WP">WordPress</button>
+    <button type="button" class="filter" data-f="TILDA">Tilda</button>
+    <button type="button" class="filter" data-f="OC">OpenCart</button>
+    <button type="button" class="filter" data-f="CUSTOM">Custom</button>
+  </div>
+
+  <div class="proj-grid" id="projGrid">
+    <a class="proj-card" data-plat="WP" href="https://evropribor.by/" target="_blank" rel="noopener">
+      <div class="proj-thumb"><span class="ph">evropribor.by</span><img src="img/projects/evropribor.jpg" alt="evropribor.by" loading="lazy" onerror="this.style.display='none'"><span class="proj-go">↗</span></div>
+      <div class="proj-body"><span class="proj-tag">WP</span><h3>evropribor.by</h3><p><span class="ru">Научно-производственный центр</span><span class="en">Scientific &amp; production center</span></p></div>
+    </a>
+    <a class="proj-card" data-plat="WP" href="https://uwt.evropribor.by/" target="_blank" rel="noopener">
+      <div class="proj-thumb"><span class="ph">uwt.evropribor.by</span><img src="img/projects/uwt-evropribor.jpg" alt="uwt.evropribor.by" loading="lazy" onerror="this.style.display='none'"><span class="proj-go">↗</span></div>
+      <div class="proj-body"><span class="proj-tag">WP</span><h3>uwt.evropribor.by</h3><p><span class="ru">Сигнализаторы уровня и уровнемеры</span><span class="en">Level alarms &amp; level meters</span></p></div>
+    </a>
+    <a class="proj-card" data-plat="TILDA" href="https://nordmax.by/" target="_blank" rel="noopener">
+      <div class="proj-thumb"><span class="ph">nordmax.by</span><img src="img/projects/nordmax.jpg" alt="nordmax.by" loading="lazy" onerror="this.style.display='none'"><span class="proj-go">↗</span></div>
+      <div class="proj-body"><span class="proj-tag">TILDA</span><h3>nordmax.by</h3><p><span class="ru">Производство домов и бань из профилированного бруса</span><span class="en">Timber houses &amp; bathhouses manufacturer</span></p></div>
+    </a>
+    <a class="proj-card" data-plat="OC" href="https://vtraktir.com/" target="_blank" rel="noopener">
+      <div class="proj-thumb"><span class="ph">vtraktir.com</span><img src="img/projects/vtraktir.jpg" alt="vtraktir.com" loading="lazy" onerror="this.style.display='none'"><span class="proj-go">↗</span></div>
+      <div class="proj-body"><span class="proj-tag">OC</span><h3>vtraktir.com</h3><p><span class="ru">Кафе «Витебский трактир»</span><span class="en">Cafe “Vitebsky Traktir”</span></p></div>
+    </a>
+    <a class="proj-card" data-plat="TILDA" href="https://golfplus.travel/" target="_blank" rel="noopener">
+      <div class="proj-thumb"><span class="ph">golfplus.travel</span><img src="img/projects/golfplus.jpg" alt="golfplus.travel" loading="lazy" onerror="this.style.display='none'"><span class="proj-go">↗</span></div>
+      <div class="proj-body"><span class="proj-tag">TILDA</span><h3>golfplus.travel</h3><p><span class="ru">Туристическая компания</span><span class="en">Travel agency</span></p></div>
+    </a>
+    <a class="proj-card" data-plat="CUSTOM" href="https://albico.by/" target="_blank" rel="noopener">
+      <div class="proj-thumb"><span class="ph">albico.by</span><img src="img/projects/albico.jpg" alt="albico.by" loading="lazy" onerror="this.style.display='none'"><span class="proj-go">↗</span></div>
+      <div class="proj-body"><span class="proj-tag">CUSTOM</span><h3>albico.by</h3><p><span class="ru">Кухонные панели</span><span class="en">Kitchen wall panels</span></p></div>
+    </a>
+    <a class="proj-card" data-plat="CUSTOM" href="https://investgroup.by/" target="_blank" rel="noopener">
+      <div class="proj-thumb"><span class="ph">investgroup.by</span><img src="img/projects/investgroup.jpg" alt="investgroup.by" loading="lazy" onerror="this.style.display='none'"><span class="proj-go">↗</span></div>
+      <div class="proj-body"><span class="proj-tag">CUSTOM</span><h3>investgroup.by</h3><p><span class="ru">Строительные материалы</span><span class="en">Construction materials</span></p></div>
+    </a>
   </div>
 
   <div class="cta-row">
@@ -1119,8 +1248,25 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
   </div>
 </section>
 
+<section class="section" id="clients">
+  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.05</span></div>
+  <div class="section-intro">
+    <h2><span class="ru">Мне доверяют</span><span class="en">Trusted by</span></h2>
+    <p class="note"><span class="ru">Компании, для которых я делал сайты, графику и схемы.</span><span class="en">Companies I have built sites, graphics and diagrams for.</span></p>
+  </div>
+  <div class="clients-row">
+    <div class="client">Atios</div>
+    <div class="client">Evropribor</div>
+    <div class="client">Nordmax</div>
+    <div class="client"><span class="ru">Витебский трактир</span><span class="en">Vitebsky Traktir</span></div>
+    <div class="client">Golfplus</div>
+    <div class="client">Albico</div>
+    <div class="client">Investgroup</div>
+  </div>
+</section>
+
 <section class="section" id="process">
-  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.04</span></div>
+  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.06</span></div>
   <div class="section-intro">
     <h2><span class="ru">Как проходит проект</span><span class="en">How a project runs</span></h2>
     <p class="note"><span class="ru">Пять последовательных этапов — от брифа до поддержки после запуска.</span><span class="en">Five sequential stages — from brief to post-launch support.</span></p>
@@ -1155,21 +1301,82 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
 </section>
 
 <section class="section" id="stack">
-  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.05</span></div>
+  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.07</span></div>
   <div class="section-intro">
     <h2><span class="ru">Инструменты</span><span class="en">Tools &amp; stack</span></h2>
+    <p class="note"><span class="ru">Выберите задачу и подключайте инструменты — результат перепишется сам.</span><span class="en">Pick a brief and plug tools in or out — the output rewrites itself.</span></p>
   </div>
-  <div class="stack-grid">
-    <div class="chip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2h3v6H9a3 3 0 010-6z"/><path d="M12 2h3a3 3 0 010 6h-3z"/><path d="M9 8h3v6H9a3 3 0 010-6z"/><circle cx="15" cy="11" r="3"/><path d="M12 14v3a3 3 0 11-3-3z"/></svg>Figma</div>
-    <div class="chip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7l-5 5 5 5"/><path d="M16 7l5 5-5 5"/><path d="M14 4l-4 16"/></svg>HTML / CSS / JS</div>
-    <div class="chip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg>React</div>
-    <!--div class="chip">Webflow</div-->
-    <div class="chip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="2"/><path d="M7 17V8h3a2.5 2.5 0 010 5H7"/><path d="M17 10.5c-1.5-.8-3 0-3 .9 0 1.6 3.2 1 3.2 2.6 0 1-1.6 1.7-3.2.8"/></svg>Adobe Photoshop</div>
-    <div class="chip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l6 9-6 11-6-11z"/><path d="M12 11v11"/><circle cx="12" cy="9" r="1.5" fill="currentColor" stroke="none"/></svg>Corel Draw</div>
-    <div class="chip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 2h14v6.5h-7zM5 8.5h7l7 6.5H5zM5 15h7v7z" fill="currentColor" stroke="none"/></svg>Framer Motion</div>
-    <div class="chip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/></svg>Claude</div>
-    <div class="chip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5l8.2 4.75v9.5L12 21.5l-8.2-4.75v-9.5z"/><path d="M12 8l4 2.3v4.4L12 17l-4-2.3v-4.4z"/></svg>ChatGPT</div>
-    <div class="chip"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7.5"/><path d="M14 14l6 6"/></svg>Qwen</div>
+  <div class="pipe">
+    <div class="pipe-left">
+      <div class="pipe-label"><span class="ru">01 / Задача</span><span class="en">01 / Brief</span></div>
+      <div class="filters" id="briefs">
+        <button type="button" class="filter on" data-brief="landing"><span class="ru">Лендинг</span><span class="en">Landing</span></button>
+        <button type="button" class="filter" data-brief="shop"><span class="ru">Магазин</span><span class="en">Store</span></button>
+        <button type="button" class="filter" data-brief="infographic"><span class="ru">Инфографика</span><span class="en">Infographics</span></button>
+        <button type="button" class="filter" data-brief="docs"><span class="ru">Документация</span><span class="en">Docs</span></button>
+      </div>
+      <div class="pipe-label"><span class="ru">02 / Инструменты — нажмите, чтобы подключить</span><span class="en">02 / Tools — click to plug in or out</span></div>
+      <div class="stack-grid" id="nodes">
+      <button type="button" class="chip node" data-tool="figma" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2h3v6H9a3 3 0 010-6z"/><path d="M12 2h3a3 3 0 010 6h-3z"/><path d="M9 8h3v6H9a3 3 0 010-6z"/><circle cx="15" cy="11" r="3"/><path d="M12 14v3a3 3 0 11-3-3z"/></svg>Figma</button>
+      <button type="button" class="chip node" data-tool="html" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7l-5 5 5 5"/><path d="M16 7l5 5-5 5"/><path d="M14 4l-4 16"/></svg>HTML / CSS / JS</button>
+      <button type="button" class="chip node" data-tool="react" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg>React</button>
+      <button type="button" class="chip node" data-tool="ps" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="2"/><path d="M7 17V8h3a2.5 2.5 0 010 5H7"/><path d="M17 10.5c-1.5-.8-3 0-3 .9 0 1.6 3.2 1 3.2 2.6 0 1-1.6 1.7-3.2.8"/></svg>Adobe Photoshop</button>
+      <button type="button" class="chip node" data-tool="corel" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l6 9-6 11-6-11z"/><path d="M12 11v11"/><circle cx="12" cy="9" r="1.5" fill="currentColor" stroke="none"/></svg>Corel Draw</button>
+      <button type="button" class="chip node" data-tool="framer" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 2h14v6.5h-7zM5 8.5h7l7 6.5H5zM5 15h7v7z" fill="currentColor" stroke="none"/></svg>Framer Motion</button>
+      <button type="button" class="chip node" data-tool="claude" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/></svg>Claude</button>
+      <button type="button" class="chip node" data-tool="gpt" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5l8.2 4.75v9.5L12 21.5l-8.2-4.75v-9.5z"/><path d="M12 8l4 2.3v4.4L12 17l-4-2.3v-4.4z"/></svg>ChatGPT</button>
+      <button type="button" class="chip node" data-tool="qwen" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7.5"/><path d="M14 14l6 6"/></svg>Qwen</button>
+      </div>
+    </div>
+    <div class="pipe-out">
+      <div class="pipe-body" id="pipeBody"></div>
+      <button type="button" class="btn btn--outline" data-open-contact>
+        <span class="ru">Обсудить задачу</span><span class="en">Discuss this brief</span> <svg class="btn-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="lab">
+  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.08</span></div>
+  <div class="section-intro">
+    <h2>Lab</h2>
+    <p class="note"><span class="ru">Мелкие эксперименты с анимацией и интерфейсами.</span><span class="en">Small experiments with motion and interfaces.</span></p>
+  </div>
+  <div class="lab-grid">
+    <div class="lab-card">
+      <div class="lab-bar">■ EASING.LAB</div>
+      <div class="lab-body">
+        <div class="filters" id="easeBtns"></div>
+        <div class="ease-view">
+          <svg class="ease-curve" viewBox="-10 -40 120 160" aria-hidden="true"><path class="ease-grid" d="M0 100H100M0 0H100M0 100V0M100 100V0"/><path id="easePath" d=""/></svg>
+          <div class="ease-track"><i class="ease-dot" id="easeDot"></i></div>
+        </div>
+        <code id="easeCode"></code>
+      </div>
+    </div>
+    <div class="lab-card lab-soon">
+      <b><span class="ru">Скоро</span><span class="en">Coming soon</span></b>
+      <span class="ru">Новые эксперименты: анимированные схемы и мини-демо на JS.</span>
+      <span class="en">More experiments: animated diagrams and small JS demos.</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="talk">
+  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.09</span></div>
+  <div class="talk">
+    <div class="talk-photo"><img src="img/iam.jpg" alt="Vadim Pilipenko" loading="lazy"></div>
+    <div>
+      <h3><span class="ru">Есть проект или пока только ощущение, что что-то не так?</span><span class="en">Have a project, or just a feeling that something is off?</span></h3>
+      <p>
+        <span class="ru">Чаще всего всё начинается именно так: человек видит, что с его сайтом или материалами что-то не так, но не может сказать, что именно. Моя задача — назвать проблему, выбрать направление и сделать: от структуры до кода.</span>
+        <span class="en">That is how most projects start: you can see something is wrong with your site or materials, but not what. My job is to name the problem, pick a direction and then build it, from structure to code.</span>
+      </p>
+      <button type="button" class="btn" data-open-contact>
+        <span class="ru">Написать мне</span><span class="en">Message me</span> <svg class="btn-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
   </div>
 </section>
 </div>
@@ -1184,6 +1391,16 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
       <a href="https://www.linkedin.com/in/vadim-pilipenko-88729161/" target="_blank" rel="noopener">LinkedIn</a>
       <a href="https://www.behance.net/vadimpilipenko" target="_blank" rel="noopener">Behance</a>
     </div>
+  </div>
+
+  <div class="foot-tag">
+    <h2 class="foot-big"><span class="ru">Сайты, интерфейсы и графика — сделано вручную</span><span class="en">Websites, interfaces and graphics — built by hand</span></h2>
+    <nav class="foot-nav">
+      <a href="#services"><span class="ru">Услуги</span><span class="en">Services</span></a>
+      <a href="#projects"><span class="ru">Проекты</span><span class="en">Projects</span></a>
+      <a href="#lab">Lab</a>
+      <a href="#" ><span class="ru">↑ Наверх</span><span class="en">↑ Back to top</span></a>
+    </nav>
   </div>
 
   <div class="titleblock-footer">
@@ -1512,7 +1729,7 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
     const rio = new IntersectionObserver(es => es.forEach(e => {
       if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); }
     }), { threshold:.15 });
-    document.querySelectorAll('.pin-row, .process .step, .chip, .spec-table .cell, .section-intro').forEach(el => {
+    document.querySelectorAll('.pin-row, .process .step, .chip, .spec-table .cell, .section-intro, .proj-card, .client, .lab-card').forEach(el => {
       el.classList.add('rv');
       const i = [...el.parentElement.children].indexOf(el);
       el.style.setProperty('--d', (i * 70) + 'ms');
@@ -1684,8 +1901,8 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
     if (!track || !matchMedia('(hover:hover)').matches) return;
     const anim = track.getAnimations()[0];
     if (!anim) return;               // например, при prefers-reduced-motion анимации нет
-    const SLOW = 0.25;               // скорость при наведении (1 = обычная, 0 = стоп)
-    const EASE = 0.1;               // плавность: меньше = мягче и дольше
+    const SLOW = 0.12;               // скорость при наведении (1 = обычная, 0 = стоп)
+    const EASE = 0.08;               // плавность: меньше = мягче и дольше
     let target = 1, raf = 0;
     const step = () => {
       const r = anim.playbackRate + (target - anim.playbackRate) * EASE;
@@ -1695,6 +1912,140 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
     const set = v => { target = v; if (!raf) raf = requestAnimationFrame(step); };
     ticker.addEventListener('mouseover', e => { if (e.target.closest('.ticker-ico')) set(SLOW); });
     ticker.addEventListener('mouseout',  e => { if (e.target.closest('.ticker-ico')) set(1); });
+  })();
+
+  /* =====================================================
+     НОВЫЕ БЛОКИ: слова, фильтры проектов, pipeline, easing lab
+     ===================================================== */
+  // бегущие слова: размножаем набор для бесшовной прокрутки
+  (() => {
+    const track = document.querySelector('.words-track');
+    if (!track) return;
+    const set = Array.from(track.children);
+    for (let i = 0; i < 3; i++) set.forEach(el => track.appendChild(el.cloneNode(true)));
+  })();
+
+  // фильтры проектов по платформе
+  (() => {
+    const bar = document.getElementById('projFilters');
+    const cards = document.querySelectorAll('#projGrid .proj-card');
+    if (!bar) return;
+    bar.addEventListener('click', e => {
+      const b = e.target.closest('.filter');
+      if (!b) return;
+      bar.querySelectorAll('.filter').forEach(x => x.classList.toggle('on', x === b));
+      cards.forEach(c => { c.hidden = !(b.dataset.f === 'all' || c.dataset.plat === b.dataset.f); });
+    });
+  })();
+
+  // pipeline: задача + инструменты -> результат
+  (() => {
+    const body = document.getElementById('pipeBody');
+    if (!body) return;
+    const T = {
+      figma:  ['Figma', 'макеты и прототип', 'mockups and prototype'],
+      html:   ['HTML / CSS / JS', 'вёрстка и интерактив', 'markup and interactivity'],
+      react:  ['React', 'интерфейсы-приложения', 'app-like interfaces'],
+      ps:     ['Photoshop', 'растровая графика', 'raster graphics'],
+      corel:  ['Corel Draw', 'векторные схемы', 'vector diagrams'],
+      framer: ['Framer Motion', 'анимация интерфейса', 'interface motion'],
+      claude: ['Claude', 'ИИ-помощь: текст и код', 'AI help: text and code'],
+      gpt:    ['ChatGPT', 'ИИ-помощь: текст и код', 'AI help: text and code'],
+      qwen:   ['Qwen', 'ИИ-помощь: текст и код', 'AI help: text and code']
+    };
+    const B = {
+      landing:     { n:['Лендинг','Landing page'], t:['figma','html','ps','framer'],
+                     r:['одностраничный сайт — от макета до публикации','one-page site — from mockup to launch'] },
+      shop:        { n:['Магазин','Online store'], t:['figma','html','react','ps'],
+                     r:['каталог, карточки товаров и оформление заказа','catalog, product cards and checkout'] },
+      infographic: { n:['Инфографика','Infographics'], t:['corel','ps','figma'],
+                     r:['схема, которую понимают без инженерного бэкграунда','a diagram anyone can read without an engineering background'] },
+      docs:        { n:['Документация','Documentation'], t:['figma','corel','claude'],
+                     r:['пошаговые инструкции и мануалы с иллюстрациями','step-by-step guides and manuals with illustrations'] }
+    };
+    const nodes = Array.from(document.querySelectorAll('#nodes .node'));
+    const briefs = Array.from(document.querySelectorAll('#briefs .filter'));
+    let brief = 'landing';
+    const on = new Set(B[brief].t);
+    const lang = () => document.body.classList.contains('lang-en') ? 1 : 0;
+
+    const render = () => {
+      const en = lang(), b = B[brief];
+      const ids = nodes.map(n => n.dataset.tool).filter(k => on.has(k));
+      let h = '<p><span class="k">&gt; ' + (en ? 'brief' : 'задача') + ':</span> ' + b.n[en] + '</p>' +
+              '<p><span class="k">&gt; ' + (en ? 'pipeline' : 'цепочка') + ':</span></p>';
+      if (!ids.length) h += '<p>  ' + (en ? 'nothing plugged in yet' : 'пока ничего не подключено') + '</p>';
+      ids.forEach(k => {
+        const name = T[k][0];
+        h += '<p>  ' + name + ' ' + '.'.repeat(Math.max(3, 17 - name.length)) + ' ' + T[k][1 + en] + '</p>';
+      });
+      h += '<p class="res"><span class="k">&gt; ' + (en ? 'nodes' : 'узлов') + ':</span> ' + ids.length + ' / ' + nodes.length + '</p>' +
+           '<p class="res"><span class="k">&gt; ' + (en ? 'result' : 'результат') + ':</span> ' + b.r[en] + '</p>';
+      body.innerHTML = h;
+      nodes.forEach(n => {
+        const o = on.has(n.dataset.tool);
+        n.classList.toggle('on', o);
+        n.setAttribute('aria-pressed', o);
+      });
+      briefs.forEach(x => x.classList.toggle('on', x.dataset.brief === brief));
+    };
+
+    briefs.forEach(x => x.addEventListener('click', () => {
+      brief = x.dataset.brief;
+      on.clear(); B[brief].t.forEach(t => on.add(t));
+      render();
+    }));
+    nodes.forEach(n => n.addEventListener('click', () => {
+      const k = n.dataset.tool;
+      on.has(k) ? on.delete(k) : on.add(k);
+      render();
+    }));
+    new MutationObserver(render).observe(document.body, { attributes:true, attributeFilter:['class'] });
+    render();
+  })();
+
+  // lab: сравнение кривых easing
+  (() => {
+    const bar = document.getElementById('easeBtns');
+    const dot = document.getElementById('easeDot');
+    const path = document.getElementById('easePath');
+    const code = document.getElementById('easeCode');
+    if (!bar || !dot || !dot.animate) return;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const E = [
+      ['linear',   [0, 0, 1, 1]],
+      ['ease-out', [0, 0, .58, 1]],
+      ['in-out',   [.42, 0, .58, 1]],
+      ['expo-out', [.2, .8, .2, 1]],
+      ['overshoot',[.34, 1.56, .64, 1]]
+    ];
+    let anim = null, cur = 3;
+    const track = dot.parentElement;
+
+    const play = () => {
+      const [x1, y1, x2, y2] = E[cur][1];
+      path.setAttribute('d', 'M0 100 C ' + (x1*100) + ' ' + (100 - y1*100) + ', ' + (x2*100) + ' ' + (100 - y2*100) + ', 100 0');
+      code.textContent = 'cubic-bezier(' + E[cur][1].join(', ') + ')';
+      if (anim) anim.cancel();
+      if (reduce) return;
+      const w = Math.max(0, track.clientWidth - 40);
+      anim = dot.animate(
+        [{ transform:'translateX(0)' }, { transform:'translateX(' + w + 'px)' }],
+        { duration:1400, easing:'cubic-bezier(' + E[cur][1].join(',') + ')', direction:'alternate', iterations:Infinity, delay:200, endDelay:200 }
+      );
+    };
+    E.forEach((e, i) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'filter' + (i === cur ? ' on' : ''); b.textContent = e[0];
+      b.addEventListener('click', () => {
+        cur = i;
+        bar.querySelectorAll('.filter').forEach((x, j) => x.classList.toggle('on', j === i));
+        play();
+      });
+      bar.appendChild(b);
+    });
+    addEventListener('resize', play);
+    play();
   })();
 </script>
 
