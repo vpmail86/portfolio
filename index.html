@@ -844,7 +844,7 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
    НОВЫЕ БЛОКИ: skip-link, манифест, слова, проекты, клиенты,
    pipeline, lab, личный блок, футер
    ===================================================================== */
-#lab, #clients, #talk, #manifest{ scroll-margin-top:80px; }
+#lab, #talk, #manifest{ scroll-margin-top:80px; }
 
 .skip{ position:absolute; left:12px; top:-60px; z-index:600; padding:10px 16px; background:var(--signal); color:#0C1217; font-family:var(--mono); font-size:13px; text-decoration:none; transition:top .2s; }
 .skip:focus{ top:12px; }
@@ -884,11 +884,6 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
 .proj-tag{ display:inline-block; margin-bottom:10px; font-family:var(--mono); font-size:11px; font-weight:600; color:var(--signal); border:1px solid var(--line-strong); border-radius:100px; padding:3px 10px; }
 .proj-body h3{ font-size:19px; margin-bottom:8px; }
 .proj-body p{ margin:0; font-size:14px; color:var(--muted); line-height:1.5; }
-
-/* клиенты */
-.clients-row{ display:flex; flex-wrap:wrap; gap:12px; }
-.client{ font-family:var(--cond); font-size:clamp(18px,2.2vw,28px); padding:14px 22px; border:1.5px solid var(--ink); border-radius:var(--radius); background:var(--card); transition:transform .18s ease, background .18s, color .18s, border-color .18s; }
-.client:hover{ transform:translateY(-3px); background:var(--signal); border-color:var(--signal); color:#0C1217; }
 
 /* pipeline */
 .pipe{ display:grid; grid-template-columns:1.1fr .9fr; gap:28px; align-items:start; }
@@ -945,7 +940,7 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
 }
 @media (max-width:700px){ .talk{ grid-template-columns:1fr; } .talk-photo{ max-width:240px; } }
 @media (max-width:560px){ .pipe-out .btn{ width:calc(100% - 40px); } .words{ margin-left:22px; } }
-@media (prefers-reduced-motion: reduce){ .words-track{ animation:none; } .proj-card, .proj-thumb img, .client{ transition:none; } }
+@media (prefers-reduced-motion: reduce){ .words-track{ animation:none; } .proj-card, .proj-thumb img{ transition:none; } }
 
 /* ---------- boot-экран ---------- */
 .boot{
@@ -1248,25 +1243,8 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
   </div>
 </section>
 
-<section class="section" id="clients">
-  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.05</span></div>
-  <div class="section-intro">
-    <h2><span class="ru">Мне доверяют</span><span class="en">Trusted by</span></h2>
-    <p class="note"><span class="ru">Компании, для которых я делал сайты, графику и схемы.</span><span class="en">Companies I have built sites, graphics and diagrams for.</span></p>
-  </div>
-  <div class="clients-row">
-    <div class="client">Atios</div>
-    <div class="client">Evropribor</div>
-    <div class="client">Nordmax</div>
-    <div class="client"><span class="ru">Витебский трактир</span><span class="en">Vitebsky Traktir</span></div>
-    <div class="client">Golfplus</div>
-    <div class="client">Albico</div>
-    <div class="client">Investgroup</div>
-  </div>
-</section>
-
 <section class="section" id="process">
-  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.06</span></div>
+  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.05</span></div>
   <div class="section-intro">
     <h2><span class="ru">Как проходит проект</span><span class="en">How a project runs</span></h2>
     <p class="note"><span class="ru">Пять последовательных этапов — от брифа до поддержки после запуска.</span><span class="en">Five sequential stages — from brief to post-launch support.</span></p>
@@ -1301,7 +1279,7 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
 </section>
 
 <section class="section" id="stack">
-  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.07</span></div>
+  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.06</span></div>
   <div class="section-intro">
     <h2><span class="ru">Инструменты</span><span class="en">Tools &amp; stack</span></h2>
     <p class="note"><span class="ru">Выберите задачу и подключайте инструменты — результат перепишется сам.</span><span class="en">Pick a brief and plug tools in or out — the output rewrites itself.</span></p>
@@ -1338,7 +1316,7 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
 </section>
 
 <section class="section" id="lab">
-  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.08</span></div>
+  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.07</span></div>
   <div class="section-intro">
     <h2>Lab</h2>
     <p class="note"><span class="ru">Мелкие эксперименты с анимацией и интерфейсами.</span><span class="en">Small experiments with motion and interfaces.</span></p>
@@ -1364,7 +1342,7 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
 </section>
 
 <section class="section" id="talk">
-  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.09</span></div>
+  <div class="sheet-marker"><span class="via"></span><span class="tag mono">S.08</span></div>
   <div class="talk">
     <div class="talk-photo"><img src="img/iam.jpg" alt="Vadim Pilipenko" loading="lazy"></div>
     <div>
@@ -1729,7 +1707,7 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
     const rio = new IntersectionObserver(es => es.forEach(e => {
       if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); }
     }), { threshold:.15 });
-    document.querySelectorAll('.pin-row, .process .step, .chip, .spec-table .cell, .section-intro, .proj-card, .client, .lab-card').forEach(el => {
+    document.querySelectorAll('.pin-row, .process .step, .chip, .spec-table .cell, .section-intro, .proj-card, .lab-card').forEach(el => {
       el.classList.add('rv');
       const i = [...el.parentElement.children].indexOf(el);
       el.style.setProperty('--d', (i * 70) + 'ms');
