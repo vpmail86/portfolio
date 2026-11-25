@@ -1684,8 +1684,8 @@ html.light .modal-close:hover{ background:var(--paper); color:var(--ink); }
     if (!track || !matchMedia('(hover:hover)').matches) return;
     const anim = track.getAnimations()[0];
     if (!anim) return;               // например, при prefers-reduced-motion анимации нет
-    const SLOW = 0.32;               // скорость при наведении (1 = обычная, 0 = стоп)
-    const EASE = 0.08;               // плавность: меньше = мягче и дольше
+    const SLOW = 0.25;               // скорость при наведении (1 = обычная, 0 = стоп)
+    const EASE = 0.1;               // плавность: меньше = мягче и дольше
     let target = 1, raf = 0;
     const step = () => {
       const r = anim.playbackRate + (target - anim.playbackRate) * EASE;
